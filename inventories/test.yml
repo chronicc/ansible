@@ -44,3 +44,7 @@ all:
         kubernetes_nodes:
           hosts:
             ubuntu1804.vagrant:
+
+        sonarqube:
+          hosts:
+            ubuntu2004.vagrant:

@@ -1,0 +1,15 @@
+---
+- src: geerlingguy.java
+  version: 1.10.0
+- src: lrk.sonarqube
+  version: 1.1.0
+- src: kevincoakley.postgres
+  version: 12.4.0
+- src: robertdebock.bootstrap
+  version: 5.2.9
+- src: robertdebock.buildtools
+  version: 3.1.4
+- src: robertdebock.postgres
+  version: 3.1.1
+- src: robertdebock.python_pip
+  version: 4.2.4

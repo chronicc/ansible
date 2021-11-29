@@ -1,0 +1,33 @@
+- hosts: sonarqube
+  become: yes
+  tasks:
+  - name: install packages
+    apt:
+      name: python3-psycopg2
+      state: latest
+
+  - name: install postgres
+    include_role:
+      name: kevincoakley.postgres
+
+  - name: create sonarqube database
+    postgresql_db:
+      name: sonarqube
+    become_user: postgres
+
+  - name: create sonarqube database user
+    postgresql_user:
+      db: sonarqube
+      name: sonarqube
+      password: sonarqube
+      priv: "ALL"
+      role_attr_flags: NOSUPERUSER,NOCREATEDB
+    become_user: postgres
+
+  - name: install java
+    include_role:
+      name: geerlingguy.java
+
+  - name: install sonarqube
+    include_role:
+      name: lrk.sonarqube

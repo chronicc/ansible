@@ -1,0 +1,7 @@
+---
+sonar_db_embedded: false
+sonar_db_pass: "sonarqube"
+sonar_db_user: "sonarqube"
+sonar_jdbc_url: "jdbc:postgresql://localhost/sonarqube"
+sonar_plugins: []
+sonar_version: 8.9.2.46101
