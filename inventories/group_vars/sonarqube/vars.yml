@@ -3,5 +3,18 @@ sonar_db_embedded: false
 sonar_db_pass: "sonarqube"
 sonar_db_user: "sonarqube"
 sonar_jdbc_url: "jdbc:postgresql://localhost/sonarqube"
-sonar_plugins: []
-sonar_version: 8.9.2.46101
+sonar_edition: enterprise
+sonar_version: 9.1.0.47736
+sonar_plugins:
+- name: "ansible"
+  version: "2.5.0"
+  marketplace: yes
+- name: "clover"
+  version: "4.1"
+  marketplace: yes
+- name: "findbugs"
+  version: "4.0.4"
+  marketplace: yes
+- name: "groovy"
+  version: "1.8"
+  marketplace: yes

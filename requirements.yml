@@ -1,15 +1,11 @@
 ---
-- src: geerlingguy.java
+- name: geerlingguy.java
   version: 1.10.0
-- src: lrk.sonarqube
-  version: 1.1.0
-- src: kevincoakley.postgres
+- name: lrk.sonarqube
+  # version: v1.1.1
+  # src: https://github.com/lrk/ansible-role-sonarqube.git
+- name: lrk.sonarqube
+  version: master
+  src: https://github.com/chronicc/ansible-role-sonarqube.git
+- name: kevincoakley.postgres
   version: 12.4.0
-- src: robertdebock.bootstrap
-  version: 5.2.9
-- src: robertdebock.buildtools
-  version: 3.1.4
-- src: robertdebock.postgres
-  version: 3.1.1
-- src: robertdebock.python_pip
-  version: 4.2.4
