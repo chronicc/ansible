@@ -1,18 +1,26 @@
 - hosts: sonarqube
   become: yes
   tasks:
-  - name: Install ansible dependencies for postgres
+  - name: Install ansible dependencies
     apt:
-      name: python3-psycopg2
+      name: "{{ item }}"
+    loop:
+    - python3-psycopg2
+    - unzip
+    tags: dependencies
 
   - name: Run postgres role
     include_role:
       name: kevincoakley.postgres
+      apply:
+        tags: postgres
+    tags: postgres
 
   - name: Create sonarqube database
     postgresql_db:
       name: sonarqube
     become_user: postgres
+    tags: postgres
 
   - name: Create sonarqube database user
     postgresql_user:
@@ -22,11 +30,18 @@
       priv: "ALL"
       role_attr_flags: NOSUPERUSER,NOCREATEDB
     become_user: postgres
+    tags: postgres
 
   - name: Run java role
     include_role:
       name: geerlingguy.java
+      apply:
+        tags: java
+    tags: java
 
   - name: Run sonarqube role
     include_role:
       name: lrk.sonarqube
+      apply:
+        tags: sonarqube
+    tags: sonarqube
