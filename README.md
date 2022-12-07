@@ -7,4 +7,5 @@ A collection of ansible playbooks for managing my infrastructure.
 - Install poetry. Run `curl -sSL https://install.python-poetry.org | python3 -`
 - Setup the virtualenv. Run `poetry install`
 - Switch into the virtualenv. Run `poetry shell`
+- Checkout submodules. Run `git submodule update --init --recursive`
 - Run a playbook. Run `ansible-playbook -i INVENTORY playbooks/PLAYBOOK`
