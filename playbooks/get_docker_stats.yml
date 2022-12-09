@@ -1,0 +1,11 @@
+---
+- name: Get docker stats
+  hosts: dockerservers
+  tasks:
+    - name: Get info on docker host
+      community.docker.docker_host_info:
+      register: result
+
+    - name: Print docker host info
+      ansible.builtin.debug:
+        var: result.host_info
