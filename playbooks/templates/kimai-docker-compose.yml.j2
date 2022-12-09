@@ -1,0 +1,75 @@
+# {{ ansible_managed }}
+---
+
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:10
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      MARIADB_DATABASE: kimai
+      MARIADB_USER: kimai
+      MARIADB_PASSWORD: {{ a_kimai__mysql_password }}
+      MARIADB_ROOT_PASSWORD: {{ a_kimai__mysql_root_password }}
+    command: --default-storage-engine innodb
+    networks:
+      - default
+    restart: unless-stopped
+    healthcheck:
+      test: mysqladmin -p$$MARIADB_ROOT_PASSWORD ping -h localhost
+      interval: 20s
+      start_period: 10s
+      timeout: 10s
+      retries: 3
+
+  kimai:
+    image: kimai/kimai2:latest
+    environment:
+      ADMINMAIL: {{ a_kimai__admin_mail }}
+      ADMINPASS: {{ a_kimai__admin_password }}
+      DATABASE_URL: mysql://kimai:{{ a_kimai__mysql_password }}@db/kimai
+      TRUSTED_HOSTS: {{ a_kimai__trusted_hosts }}
+    volumes:
+      - public:/opt/kimai/public
+      - var:/opt/kimai/var
+    networks:
+      - default
+    restart: unless-stopped
+
+  nginx:
+    image: tobybatch/nginx-fpm-reverse-proxy
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.kimai.rule=Host(`{{ a_kimai__service_fqdn }}`)
+      - traefik.http.routers.kimai.entrypoints=websecure
+      - traefik.http.routers.kimai.tls.certresolver=letsencrypt
+      - traefik.http.services.kimai.loadbalancer.healthcheck.path=/health
+    # ports:
+    #   - 127.0.0.1:{{ a_kimai__service_port }}:80
+    volumes:
+      - public:/opt/kimai/public:ro
+    networks:
+      - default
+      - traefik
+    restart: unless-stopped
+    depends_on:
+      - kimai
+    healthcheck:
+      test: wget --spider http://nginx/health || exit 1
+      interval: 20s
+      start_period: 10s
+      timeout: 10s
+      retries: 3
+
+volumes:
+    database:
+    public:
+    var:
+
+networks:
+  traefik:
+    name: traefik
+    external: true

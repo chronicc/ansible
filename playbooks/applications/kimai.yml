@@ -1,0 +1,36 @@
+---
+- name: kimai // Create service directory
+  ansible.builtin.file:
+    dest: '{{ f_docker__home }}/kimai'
+    state: directory
+    owner: root
+    group: docker
+    mode: '0755'
+  tags:
+    - application
+    - kimai
+
+- name: kimai // Create docker-compose.yml
+  ansible.builtin.template:
+    src: templates/kimai-docker-compose.yml.j2
+    dest: '{{ f_docker__home }}/kimai/docker-compose.yml'
+    owner: root
+    group: docker
+    mode: '0644'
+  notify: Restart kimai
+  tags:
+    - application
+    - kimai
+
+- name: kimai // Create nginx config
+  ansible.builtin.template:
+    src: templates/kimai-nginx.conf.j2
+    dest: '{{ nginx_sites_path }}/kimai.conf'
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload nginx
+  when: feature_nginx
+  tags:
+    - application
+    - kimai

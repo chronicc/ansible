@@ -1,0 +1,61 @@
+---
+- name: Main ansible playbook
+  hosts: all
+  become: yes
+  serial: 10
+  tasks:
+    - name: Include os specific variables
+      ansible.builtin.include_vars: "{{ item }}"
+      with_first_found:
+        - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
+        - "{{ ansible_distribution }}.yml"
+
+    - name: include default toolchain
+      ansible.builtin.include_tasks: features/default_toolchain.yml
+
+    # ---( Features )---
+
+    - name: include docker
+      ansible.builtin.include_tasks: features/docker.yml
+      when: feature_docker
+
+    - name: include nginx
+      ansible.builtin.include_tasks: features/nginx.yml
+      when: feature_nginx
+
+    - name: include traefik
+      ansible.builtin.include_tasks: features/traefik.yml
+      when: feature_traefik
+      tags:
+        - application
+        - traefik
+
+    # ---( Applications )---
+
+    - name: include kimai
+      ansible.builtin.include_tasks: applications/kimai.yml
+      when:
+        - app_kimai
+        - feature_docker
+        - feature_nginx or feature_traefik
+      tags:
+        - application
+        - kimai
+
+  handlers:
+    - name: Reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
+
+    - name: Restart kimai
+      community.docker.docker_compose:
+        project_src: "{{ f_docker__home }}/kimai"
+        restarted: true
+      tags:
+        - kimai
+
+    - name: Restart traefik
+      community.docker.docker_compose:
+        project_src: "{{ f_docker__home }}/traefik"
+        restarted: true

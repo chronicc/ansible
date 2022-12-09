@@ -1,0 +1,30 @@
+---
+- name: traefik // Create service directory
+  ansible.builtin.file:
+    dest: '{{ f_docker__home }}/traefik'
+    state: directory
+    owner: root
+    group: docker
+    mode: '0755'
+  tags:
+    - application
+    - traefik
+
+- name: traefik // Create docker network
+  community.docker.docker_network:
+    name: traefik
+  tags:
+    - application
+    - traefik
+
+- name: traefik // Create docker-compose.yml
+  ansible.builtin.template:
+    src: templates/traefik-docker-compose.yml.j2
+    dest: '{{ f_docker__home }}/traefik/docker-compose.yml'
+    owner: root
+    group: docker
+    mode: '0644'
+  notify: Restart traefik
+  tags:
+    - application
+    - traefik

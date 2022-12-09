@@ -1,0 +1,12 @@
+---
+- name: default toolchain // Install default python packages
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+  loop: '{{ python_packages }}'
+
+- name: default toolchain // Install default packages
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+  loop: '{{ default_packages }}'

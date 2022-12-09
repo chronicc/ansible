@@ -1,0 +1,34 @@
+---
+- name: docker // Add docker repository key
+  ansible.builtin.apt_key:
+    url: '{{ docker_repository_key_url }}'
+    state: present
+
+- name: docker // Add docker repository
+  ansible.builtin.apt_repository:
+    repo: '{{ docker_repository }}'
+    filename: docker
+    state: present
+
+- name: docker // Install docker package
+  ansible.builtin.package:
+    name: '{{ docker_package }}'
+    state: present
+
+- name: docker // Install docker python package
+  ansible.builtin.pip:
+    name: docker
+    state: present
+
+- name: docker // Install docker-compose python package
+  ansible.builtin.pip:
+    name: 'docker-compose=={{ f_docker__compose_version }}'
+    state: present
+
+- name: docker // Create docker home
+  ansible.builtin.file:
+    dest: '{{ f_docker__home }}'
+    state: directory
+    owner: root
+    group: docker
+    mode: '0750'
