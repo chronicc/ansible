@@ -10,3 +10,7 @@ A collection of ansible playbooks for managing my infrastructure.
 - Checkout submodules. Run `git submodule update --init --recursive`
 - Install collections. Run `ansible-galaxy install -r requrirements.yml`
 - Run a playbook. Run `ansible-playbook -i INVENTORY playbooks/PLAYBOOK`
+
+## Development
+
+- Install pre-commit. Run `pre-commit install`
