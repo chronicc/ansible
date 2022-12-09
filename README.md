@@ -8,4 +8,5 @@ A collection of ansible playbooks for managing my infrastructure.
 - Setup the virtualenv. Run `poetry install`
 - Switch into the virtualenv. Run `poetry shell`
 - Checkout submodules. Run `git submodule update --init --recursive`
+- Install collections. Run `ansible-galaxy install -r requrirements.yml`
 - Run a playbook. Run `ansible-playbook -i INVENTORY playbooks/PLAYBOOK`
