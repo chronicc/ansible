@@ -24,7 +24,7 @@
     owner: root
     group: docker
     mode: '0644'
-  notify: Restart traefik
+  notify: Update traefik
   tags:
     - application
     - traefik

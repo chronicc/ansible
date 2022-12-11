@@ -48,14 +48,16 @@
         name: nginx
         state: reloaded
 
-    - name: Restart kimai
+    - name: Update kimai
       community.docker.docker_compose:
         project_src: "{{ f_docker__home }}/kimai"
-        restarted: true
       tags:
+        - application
         - kimai
 
-    - name: Restart traefik
+    - name: Update traefik
       community.docker.docker_compose:
         project_src: "{{ f_docker__home }}/traefik"
-        restarted: true
+      tags:
+        - application
+        - traefik

@@ -17,7 +17,7 @@
     owner: root
     group: docker
     mode: '0644'
-  notify: Restart kimai
+  notify: Update kimai
   tags:
     - application
     - kimai
