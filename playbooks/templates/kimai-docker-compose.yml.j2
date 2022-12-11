@@ -41,14 +41,13 @@ services:
   nginx:
     image: tobybatch/nginx-fpm-reverse-proxy
     labels:
-      - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.kimai.rule=Host(`{{ a_kimai__service_fqdn }}`)
+      - traefik.enable=true
       - traefik.http.routers.kimai.entrypoints=websecure
+      - traefik.http.routers.kimai.rule=Host(`{{ a_kimai__service_fqdn }}`)
       - traefik.http.routers.kimai.tls.certresolver=letsencrypt
+      - traefik.http.routers.kimai.tls=true
       - traefik.http.services.kimai.loadbalancer.healthcheck.path=/health
-    # ports:
-    #   - 127.0.0.1:{{ a_kimai__service_port }}:80
     volumes:
       - public:/opt/kimai/public:ro
     networks:
