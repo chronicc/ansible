@@ -1,0 +1,34 @@
+---
+- name: nextcloud // Create service directory
+  ansible.builtin.file:
+    dest: '{{ f_docker__home }}/nextcloud'
+    state: directory
+    owner: root
+    group: docker
+    mode: '0755'
+  tags:
+    - application
+    - nextcloud
+
+- name: nextcloud // Create docker-compose.yml
+  ansible.builtin.template:
+    src: templates/nextcloud-docker-compose.yml.j2
+    dest: '{{ f_docker__home }}/nextcloud/docker-compose.yml'
+    owner: root
+    group: docker
+    mode: '0644'
+  notify: Update nextcloud
+  tags:
+    - application
+    - nextcloud
+
+- name: nextcloud // Install cronjob
+  ansible.builtin.cron:
+    name: 'nextcloud'
+    job: '/usr/bin/docker exec -i -u www-data nextcloud_app_1 php -f /var/www/html/cron.php'
+    minute: '*/5'
+    user: root
+    backup: yes
+  tags:
+    - application
+    - nextcloud

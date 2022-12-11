@@ -42,6 +42,16 @@
         - application
         - kimai
 
+    - name: Include nextcloud
+      ansible.builtin.include_tasks: applications/nextcloud.yml
+      when:
+        - app_nextcloud
+        - feature_docker
+        - feature_traefik
+      tags:
+        - application
+        - nextcloud
+
   handlers:
     - name: Reload nginx
       ansible.builtin.service:
@@ -54,6 +64,13 @@
       tags:
         - application
         - kimai
+
+    - name: Update nextcloud
+      community.docker.docker_compose:
+        project_src: "{{ f_docker__home }}/nextcloud"
+      tags:
+        - application
+        - nextcloud
 
     - name: Update traefik
       community.docker.docker_compose:

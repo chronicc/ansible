@@ -1,0 +1,71 @@
+# {{ ansible_managed }}
+---
+version: '3.8'
+
+services:
+  db:
+    image: mariadb
+    command:
+      --transaction-isolation=READ-COMMITTED
+      --binlog-format=ROW
+      --skip-innodb-read-only-compressed
+    environment:
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_PASSWORD={{ a_nextcloud__mysql_password }}
+      - MYSQL_ROOT_PASSWORD={{ a_nextcloud__mysql_root_password }}
+      - MYSQL_USER=nextcloud
+    volumes:
+      - database:/var/lib/mysql
+    networks:
+      - default
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    command: redis-server --requirepass {{ a_nextcloud__redis_password }}
+    volumes:
+      - redis:/data
+    networks:
+      - default
+    restart: unless-stopped
+
+  app:
+    image: nextcloud:24
+    labels:
+      - traefik.docker.network=traefik
+      - traefik.enable={{ a_nextcloud__routing_enabled }}
+      - traefik.http.middlewares.nextcloud-dav.replacepathregex.regex=^/.well-known/ca(l|rd)dav
+      - traefik.http.middlewares.nextcloud-dav.replacepathregex.replacement=https://$$1/remote.php/dav/
+      - traefik.http.routers.nextcloud.entrypoints=websecure
+      - traefik.http.routers.nextcloud.middlewares=nextcloud-dav
+      - traefik.http.routers.nextcloud.rule=Host(`{{ a_nextcloud__service_fqdn }}`)
+      - traefik.http.routers.nextcloud.tls.certresolver=letsencrypt
+      - traefik.http.routers.nextcloud.tls=true
+    environment:
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_HOST=db
+      - MYSQL_PASSWORD={{ a_nextcloud__mysql_password }}
+      - MYSQL_USER=nextcloud
+      - NEXTCLOUD_TRUSTED_DOMAINS={{ a_nextcloud__trusted_hosts }}
+      - OVERWRITECLIURL=https://{{ a_nextcloud__service_fqdn }}
+      - OVERWRITEHOST={{ a_nextcloud__service_fqdn }}
+      - OVERWRITEPROTOCOL=https
+      - REDIS_HOST_PASSWORD={{ a_nextcloud__redis_password }}
+      - REDIS_HOST=redis
+      - TRUSTED_PROXIES=172.0.0.1/8
+    volumes:
+      - data:/var/www/html
+    networks:
+      - default
+      - traefik
+    restart: unless-stopped
+
+volumes:
+  data:
+  database:
+  redis:
+
+networks:
+  traefik:
+    name: traefik
+    external: true
