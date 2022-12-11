@@ -31,6 +31,10 @@ services:
       ADMINPASS: {{ a_kimai__admin_password }}
       DATABASE_URL: mysql://kimai:{{ a_kimai__mysql_password }}@db/kimai
       TRUSTED_HOSTS: {{ a_kimai__trusted_hosts }}
+      {% if a_kimai__smtp_username is defined and a_kimai__smtp_password is defined and a_kimai__smtp_server is defined -%}
+      MAILER_URL: smtp://{{ a_kimai__smtp_username }}:{{ a_kimai__smtp_password }}@{{ a_kimai__smtp_server }}:587?encryption=tls&auth_mode=plain
+      {% endif -%}
+      MAILER_FROM: kimai@{{ a_kimai__service_domain }}
     volumes:
       - public:/opt/kimai/public
       - var:/opt/kimai/var
