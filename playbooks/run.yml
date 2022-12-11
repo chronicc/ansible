@@ -10,20 +10,20 @@
         - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
         - "{{ ansible_distribution }}.yml"
 
-    - name: include default toolchain
+    - name: Include default toolchain
       ansible.builtin.include_tasks: features/default_toolchain.yml
 
     # ---( Features )---
 
-    - name: include docker
+    - name: Include docker
       ansible.builtin.include_tasks: features/docker.yml
       when: feature_docker
 
-    - name: include nginx
+    - name: Include nginx
       ansible.builtin.include_tasks: features/nginx.yml
       when: feature_nginx
 
-    - name: include traefik
+    - name: Include traefik
       ansible.builtin.include_tasks: features/traefik.yml
       when: feature_traefik
       tags:
@@ -32,7 +32,7 @@
 
     # ---( Applications )---
 
-    - name: include kimai
+    - name: Include kimai
       ansible.builtin.include_tasks: applications/kimai.yml
       when:
         - app_kimai
