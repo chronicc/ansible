@@ -2,9 +2,12 @@
 custom_binary_path: /usr/local/bin
 
 default_packages:
+  - apt-transport-https
+  - bash-completion
   - curl
   - git
   - htop
+  - mlocate
   - vim
 
 docker_package: docker-ce
