@@ -6,7 +6,7 @@ services:
   traefik:
     image: traefik:v2.9
     command:
-      --api.insecure=true
+      --api.dashboard=true
       --certificatesresolvers.letsencrypt.acme.email=admin@kurthos.com
       --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web
       --certificatesresolvers.letsencrypt.acme.httpchallenge=true
@@ -17,10 +17,19 @@ services:
       --entrypoints.websecure.address=:443
       --providers.docker
       --providers.docker.exposedbydefault=false
+    labels:
+      - "traefik.docker.network=traefik"
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users={{ f_traefik__basic_auth_users }}"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.{{ ansible_nodename }}`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik.tls=true"
     ports:
       - 80:80
       - 443:443
-      - 8080:8080
     networks:
       - traefik
     volumes:
