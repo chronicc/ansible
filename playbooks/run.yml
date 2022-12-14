@@ -52,11 +52,24 @@
         - application
         - nextcloud
 
+    - name: Include roundcube
+      ansible.builtin.include_tasks: applications/roundcube.yml
+      when:
+        - app_roundcube
+        - feature_docker
+        - feature_traefik
+      tags:
+        - application
+        - roundcube
+
   handlers:
     - name: Reload nginx
       ansible.builtin.service:
         name: nginx
         state: reloaded
+      tags:
+        - application
+        - nginx
 
     - name: Update kimai
       community.docker.docker_compose:
@@ -71,6 +84,13 @@
       tags:
         - application
         - nextcloud
+
+    - name: Update roundcube
+      community.docker.docker_compose:
+        project_src: "{{ f_docker__home }}/roundcube"
+      tags:
+        - application
+        - roundcube
 
     - name: Update traefik
       community.docker.docker_compose:
