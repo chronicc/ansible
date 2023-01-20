@@ -36,8 +36,10 @@ services:
       - traefik.enable={{ a_nextcloud__routing_enabled }}
       - traefik.http.middlewares.nextcloud-dav.replacepathregex.regex=^/.well-known/ca(l|rd)dav
       - traefik.http.middlewares.nextcloud-dav.replacepathregex.replacement=https://$$1/remote.php/dav/
+      - "traefik.http.middlewares.nextcloud-headers.headers.STSIncludeSubdomains=true"
+      - "traefik.http.middlewares.nextcloud-headers.headers.STSSeconds=31536000"
       - traefik.http.routers.nextcloud.entrypoints=websecure
-      - traefik.http.routers.nextcloud.middlewares=nextcloud-dav
+      - traefik.http.routers.nextcloud.middlewares=nextcloud-dav,nextcloud-headers
       - traefik.http.routers.nextcloud.rule=Host(`{{ a_nextcloud__service_fqdn }}`)
       - traefik.http.routers.nextcloud.tls.certresolver=letsencrypt
       - traefik.http.routers.nextcloud.tls=true
