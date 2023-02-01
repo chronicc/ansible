@@ -30,7 +30,7 @@ services:
     restart: unless-stopped
 
   app:
-    image: nextcloud:24
+    image: nextcloud:{{ a_nextcloud__major_version }}
     labels:
       - traefik.docker.network=traefik
       - traefik.enable={{ a_nextcloud__routing_enabled }}
