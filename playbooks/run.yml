@@ -17,15 +17,15 @@
 
     - name: Include docker
       ansible.builtin.include_tasks: features/docker.yml
-      when: feature_docker
+      when: feature_docker | default(false)
 
     - name: Include nginx
       ansible.builtin.include_tasks: features/nginx.yml
-      when: feature_nginx
+      when: feature_nginx | default(false)
 
     - name: Include traefik
       ansible.builtin.include_tasks: features/traefik.yml
-      when: feature_traefik
+      when: feature_traefik | default(false)
       tags:
         - application
         - traefik
@@ -35,9 +35,9 @@
     - name: Include kimai
       ansible.builtin.include_tasks: applications/kimai.yml
       when:
-        - app_kimai
-        - feature_docker
-        - feature_nginx or feature_traefik
+        - app_kimai | default(false)
+        - feature_docker | default(false)
+        - (feature_nginx or feature_traefik) | default(false)
       tags:
         - application
         - kimai
@@ -45,9 +45,9 @@
     - name: Include nextcloud
       ansible.builtin.include_tasks: applications/nextcloud.yml
       when:
-        - app_nextcloud
-        - feature_docker
-        - feature_traefik
+        - app_nextcloud | default(false)
+        - feature_docker | default(false)
+        - feature_traefik | default(false)
       tags:
         - application
         - nextcloud
@@ -55,9 +55,9 @@
     - name: Include roundcube
       ansible.builtin.include_tasks: applications/roundcube.yml
       when:
-        - app_roundcube
-        - feature_docker
-        - feature_traefik
+        - app_roundcube | default(false)
+        - feature_docker | default(false)
+        - feature_traefik | default(false)
       tags:
         - application
         - roundcube
