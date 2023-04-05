@@ -21,16 +21,3 @@
   tags:
     - application
     - kimai
-
-- name: kimai // Create nginx config
-  ansible.builtin.template:
-    src: templates/kimai-nginx.conf.j2
-    dest: '{{ nginx_sites_path }}/kimai.conf'
-    owner: root
-    group: root
-    mode: '0644'
-  notify: Reload nginx
-  when: feature_nginx
-  tags:
-    - application
-    - kimai
