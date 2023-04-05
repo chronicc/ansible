@@ -47,6 +47,16 @@
         - application
         - kimai
 
+    - name: Include matrixhook
+      ansible.builtin.include_tasks: applications/matrixhook.yml
+      when:
+        - app_matrixhook | default(false)
+        - feature_docker | default(false)
+        - feature_traefik | default(false)
+      tags:
+        - application
+        - matrixhook
+
     - name: Include nextcloud
       ansible.builtin.include_tasks: applications/nextcloud.yml
       when:
@@ -82,6 +92,13 @@
       tags:
         - application
         - kimai
+
+    - name: Update matrixhook
+      community.docker.docker_compose:
+        project_src: "{{ f_docker__home }}/matrixhook"
+      tags:
+        - application
+        - matrixhook
 
     - name: Update nextcloud
       community.docker.docker_compose:
