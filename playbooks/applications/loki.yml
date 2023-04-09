@@ -32,7 +32,13 @@
     owner: root
     group: root
     mode: '0644'
-  notify: Update loki
+  tags:
+    - application
+    - loki
+
+- name: Update loki
+  community.docker.docker_compose:
+    project_src: "{{ f_docker__home }}/loki"
   tags:
     - application
     - loki

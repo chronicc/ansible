@@ -17,7 +17,13 @@
     owner: root
     group: docker
     mode: '0644'
-  notify: Update kimai
+  tags:
+    - application
+    - kimai
+
+- name: Update kimai
+  community.docker.docker_compose:
+    project_src: "{{ f_docker__home }}/kimai"
   tags:
     - application
     - kimai

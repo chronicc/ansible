@@ -24,7 +24,13 @@
     owner: root
     group: docker
     mode: '0644'
-  notify: Update traefik
+  tags:
+    - application
+    - traefik
+
+- name: Update traefik
+  community.docker.docker_compose:
+    project_src: "{{ f_docker__home }}/traefik"
   tags:
     - application
     - traefik

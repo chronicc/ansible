@@ -17,7 +17,6 @@
     owner: root
     group: docker
     mode: '0644'
-  notify: Update nextcloud
   tags:
     - application
     - nextcloud
@@ -29,6 +28,13 @@
     minute: '*/5'
     user: root
     backup: yes
+  tags:
+    - application
+    - nextcloud
+
+- name: Update nextcloud
+  community.docker.docker_compose:
+    project_src: "{{ f_docker__home }}/nextcloud"
   tags:
     - application
     - nextcloud

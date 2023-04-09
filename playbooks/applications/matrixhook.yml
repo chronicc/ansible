@@ -17,7 +17,13 @@
     owner: root
     group: docker
     mode: '0644'
-  notify: Update matrixhook
+  tags:
+    - application
+    - matrixhook
+
+- name: Update matrixhook
+  community.docker.docker_compose:
+    project_src: "{{ f_docker__home }}/matrixhook"
   tags:
     - application
     - matrixhook

@@ -17,7 +17,6 @@
     owner: root
     group: docker
     mode: '0644'
-  notify: Update roundcube
   tags:
     - application
     - roundcube
@@ -29,7 +28,13 @@
     owner: root
     group: root
     mode: '0644'
-  notify: Update roundcube
+  tags:
+    - application
+    - roundcube
+
+- name: Update roundcube
+  community.docker.docker_compose:
+    project_src: "{{ f_docker__home }}/roundcube"
   tags:
     - application
     - roundcube
