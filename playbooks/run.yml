@@ -51,6 +51,16 @@
         - application
         - kimai
 
+    - name: Include loki
+      ansible.builtin.include_tasks: applications/loki.yml
+      when:
+        - app_loki | default(false)
+        - feature_docker | default(false)
+        - (feature_nginx or feature_traefik) | default(false)
+      tags:
+        - application
+        - loki
+
     - name: Include matrixhook
       ansible.builtin.include_tasks: applications/matrixhook.yml
       when:
@@ -97,12 +107,27 @@
       tags:
         - docker
 
+    - name: Restart loki
+      community.docker.docker_compose:
+        project_src: "{{ f_docker__home }}/loki"
+        restarted: yes
+      tags:
+        - application
+        - loki
+
     - name: Update kimai
       community.docker.docker_compose:
         project_src: "{{ f_docker__home }}/kimai"
       tags:
         - application
         - kimai
+
+    - name: Update loki
+      community.docker.docker_compose:
+        project_src: "{{ f_docker__home }}/loki"
+      tags:
+        - application
+        - loki
 
     - name: Update matrixhook
       community.docker.docker_compose:

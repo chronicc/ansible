@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  loki:
+    command: -config.file=/etc/loki/local-config.yaml
+    image: grafana/loki:{{ a_loki__loki_image_tag }}
+    networks:
+      - default
+    restart: unless-stopped
+
+  promtail:
+    command: -config.file=/etc/promtail/config.yml
+    image: grafana/promtail:{{ a_loki__promtail_image_tag}}
+    networks:
+      - default
+    restart: unless-stopped
+    volumes:
+      - ./config/promtail.yml:/etc/promtail/config.yml
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/log:/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  grafana:
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+      - GF_PATHS_CONFIG=/etc/grafana/grafana.ini
+      - GF_PATHS_DATA=/var/lib/grafana
+      - GF_PATHS_HOME=/usr/share/grafana
+      - GF_PATHS_LOGS=/var/log/grafana
+      - GF_PATHS_PLUGINS=/var/lib/grafana/plugins
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_SECURITY_ADMIN_PASSWORD={{ a_loki__grafana_admin_password }}
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        EOF
+        /run.sh
+    image: grafana/grafana-oss:{{ a_loki__grafana_image_tag }}
+    labels:
+      - traefik.docker.network=traefik
+      - traefik.enable={{ a_loki__grafana_routing_enabled }}
+      - traefik.http.routers.loki.entrypoints=websecure
+      - traefik.http.routers.loki.rule=Host(`{{ a_loki__grafana_service_fqdn }}`)
+      - traefik.http.routers.loki.tls.certresolver=letsencrypt
+      - traefik.http.routers.loki.tls=true
+      - traefik.http.services.loki.loadbalancer.healthcheck.path=/api/health
+    networks:
+      - default
+      - traefik
+    restart: unless-stopped
+    volumes:
+      - grafana_config:/etc/grafana
+      - grafana_data:/var/lib/grafana
+
+networks:
+  default:
+  traefik:
+    name: traefik
+    external: true
+
+volumes:
+  grafana_config:
+  grafana_data:
