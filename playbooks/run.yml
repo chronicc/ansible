@@ -9,6 +9,8 @@
       with_first_found:
         - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
         - "{{ ansible_distribution }}.yml"
+      tags:
+        - always
 
     - name: Include host configuration
       ansible.builtin.include_tasks: features/host_config.yml
@@ -23,6 +25,8 @@
     - name: Include docker
       ansible.builtin.include_tasks: features/docker.yml
       when: feature_docker | default(false)
+      tags:
+        - docker
 
     - name: Include nginx
       ansible.builtin.include_tasks: features/nginx.yml
@@ -85,6 +89,13 @@
       tags:
         - application
         - nginx
+
+    - name: Restart docker
+      ansible.builtin.service:
+        name: docker
+        state: restarted
+      tags:
+        - docker
 
     - name: Update kimai
       community.docker.docker_compose:
