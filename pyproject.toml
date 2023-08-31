@@ -12,7 +12,7 @@ python = ">=3.10"
 pywinrm = ">=0.3.0"
 
 [tool.poetry.dev-dependencies]
-ansible-lint = "^6"
+ansible-lint = { version = "^6", markers = "platform_system != 'Windows'" }
 molecule = "^6"
 molecule-docker = "^2"
 pre-commit = "^2"
