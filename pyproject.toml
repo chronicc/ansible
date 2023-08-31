@@ -1,19 +1,21 @@
 [tool.poetry]
 name = "cc.chroni.ansible"
 version = "0.1.0"
-description = ""
+description = "Ansible configuration for setting up my infrastructure."
 authors = ["Thomas Steinert <hello@chroni.cc>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-ansible = "^7.1.0"
-docker = "^6.0.1"
+ansible-core = "^2"
+docker = "^6"
+python = ">=3.10"
+pywinrm = ">=0.3.0"
 
 [tool.poetry.dev-dependencies]
-ansible-lint = "5.4.0"
-molecule = "^4.0.4"
-pre-commit = "^2.20.0"
+ansible-lint = "^6"
+molecule = "^6"
+molecule-docker = "^2"
+pre-commit = "^2"
 
 [build-system]
 requires = ["poetry-core"]

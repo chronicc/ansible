@@ -1,4 +1,5 @@
-*.info
 .cache
 .docker
+.venv
 .vscode
+*.info
