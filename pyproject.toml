@@ -6,6 +6,7 @@ authors = ["Thomas Steinert <hello@chroni.cc>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
+ansible = "^8"
 ansible-core = "^2"
 docker = "^6"
 python = ">=3.10"
