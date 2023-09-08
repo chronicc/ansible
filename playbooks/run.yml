@@ -12,14 +12,6 @@
       tags:
         - always
 
-    - name: Include host configuration
-      ansible.builtin.include_tasks: features/host_config.yml
-      tags:
-        - host
-
-    - name: Include default toolchain
-      ansible.builtin.include_tasks: features/default_toolchain.yml
-
     # ---( Features )---
 
     - name: Include docker
