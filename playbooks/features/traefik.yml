@@ -28,7 +28,7 @@
     - application
     - traefik
 
-- name: Update traefik
+- name: traefik // Update deployment
   community.docker.docker_compose:
     project_src: "{{ f_docker__home }}/traefik"
   tags:

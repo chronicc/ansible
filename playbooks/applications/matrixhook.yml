@@ -21,7 +21,7 @@
     - application
     - matrixhook
 
-- name: Update matrixhook
+- name: matrixhook // Update deployment
   community.docker.docker_compose:
     project_src: "{{ f_docker__home }}/matrixhook"
   tags:

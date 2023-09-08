@@ -1,5 +1,5 @@
 ---
-- name: Set hostname
+- name: host config // Set hostname
   ansible.builtin.hostname:
     name: '{{ hostname }}'
   tags:

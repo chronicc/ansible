@@ -36,7 +36,7 @@
     - application
     - loki
 
-- name: Update loki
+- name: loki // Update deployment
   community.docker.docker_compose:
     project_src: "{{ f_docker__home }}/loki"
   tags:

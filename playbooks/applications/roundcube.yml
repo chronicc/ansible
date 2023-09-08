@@ -32,7 +32,7 @@
     - application
     - roundcube
 
-- name: Update roundcube
+- name: roundcube // Update deployment
   community.docker.docker_compose:
     project_src: "{{ f_docker__home }}/roundcube"
   tags:

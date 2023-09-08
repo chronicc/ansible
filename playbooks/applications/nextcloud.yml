@@ -32,7 +32,7 @@
     - application
     - nextcloud
 
-- name: Update nextcloud
+- name: nextcloud // Update deployment
   community.docker.docker_compose:
     project_src: "{{ f_docker__home }}/nextcloud"
   tags:
