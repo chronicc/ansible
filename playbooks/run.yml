@@ -38,7 +38,7 @@
       when:
         - app_kimai | default(false)
         - feature_docker | default(false)
-        - (feature_nginx or feature_traefik) | default(false)
+        - (feature_nginx | default(false) or feature_traefik | default(false))
       tags:
         - application
         - kimai
@@ -48,7 +48,7 @@
       when:
         - app_loki | default(false)
         - feature_docker | default(false)
-        - (feature_nginx or feature_traefik) | default(false)
+        - (feature_nginx | default(false) or feature_traefik | default(false))
       tags:
         - application
         - loki
