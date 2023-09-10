@@ -38,3 +38,13 @@
   tags:
     - application
     - nextcloud
+  when: not force_update | default(false)
+
+- name: nextcloud // Update deployment (forced)
+  community.docker.docker_compose:
+    project_src: "{{ f_docker__home }}/nextcloud"
+    pull: yes
+  tags:
+    - application
+    - nextcloud
+  when: force_update | default(false)
