@@ -24,6 +24,9 @@ python_packages:
   - python3.9-minimal
   - python3.9-venv
 
+python_pip_packages:
+  - github3.py
+
 nginx_certificates_path: /etc/nginx/certs
 nginx_package: nginx
 nginx_sites_path: /etc/nginx/sites-enabled

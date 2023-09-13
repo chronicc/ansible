@@ -18,11 +18,14 @@ docker_compose_package_url: https://github.com/docker/compose/releases/download
 docker_compose_package_name: docker-compose-{{ ansible_system }}-{{ ansible_architecture }}
 
 python_packages:
-  - python3-setuptools
   - python3-pip
+  - python3-setuptools
   - python3.10
   - python3.10-minimal
   - python3.10-venv
+
+python_pip_packages:
+  - github3.py
 
 nginx_certificates_path: /etc/nginx/certs
 nginx_package: nginx
