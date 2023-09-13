@@ -14,3 +14,10 @@
   tags:
     - host
 
+- name: host config // Install packages
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+  loop: '{{ h_packages | default([]) }}'
+  tags:
+    - host
