@@ -33,6 +33,8 @@ Vagrant.configure('2') do |config|
     'vagrant-libvirt',
   ]
 
+  #---( Generic Machines )----------------------------------------------------
+
   config.vm.define "#{CENTOS_6_HOSTNAME}" do |host|
     host.vm.box = CENTOS_6_BOX_IMAGE
     host.vm.network 'private_network', type: 'dhcp'
@@ -74,6 +76,18 @@ Vagrant.configure('2') do |config|
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{WINDOWS_SERVER_2022_HOSTNAME}"
   end
+
+  #---( Application Specific Machines )---------------------------------------
+
+  (1..3).each do |machine_id|
+    config.vm.define "hadoop-#{machine_id}" do |host|
+      host.vm.box = ENV['AW_HADOOP_BOX_IMAGE']
+      host.vm.network 'private_network', type: 'dhcp'
+      host.vm.hostname = "hadoop-#{machine_id}.vagrant"
+    end
+  end
+
+  #---( Resource Setup )------------------------------------------------------
 
   config.vm.provider :libvirt do |vm|
     vm.cpus = CPUS
