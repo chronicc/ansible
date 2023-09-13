@@ -6,3 +6,11 @@
     - hostname | default(false)
   tags:
     - host
+
+- name: host config // Ensure ansible cache directory exists
+  ansible.builtin.file:
+    path: /var/cache/ansible
+    state: directory
+  tags:
+    - host
+
