@@ -1,4 +1,25 @@
 ---
+- name: default_toolchain // Update Package Cache (apt)
+  tags: always
+  ansible.builtin.apt:
+    update_cache: yes
+  changed_when: false
+  when: ansible_pkg_mgr == "apt"
+
+- name: default_toolchain // Update Package Cache (dnf)
+  tags: always
+  ansible.builtin.dnf:
+    update_cache: yes
+  changed_when: false
+  when: ansible_pkg_mgr == "dnf"
+
+- name: default_toolchain // Update Package Cache (yum)
+  tags: always
+  ansible.builtin.yum:
+    update_cache: yes
+  changed_when: false
+  when: ansible_pkg_mgr == "yum"
+
 - name: default toolchain // Install default python packages
   ansible.builtin.package:
     name: '{{ item }}'
