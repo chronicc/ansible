@@ -1,5 +1,7 @@
 .cache
 .docker
+.envrc.local
+.vagrant
 .venv
 .vscode
 *.info
