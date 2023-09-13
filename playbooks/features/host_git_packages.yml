@@ -1,0 +1,43 @@
+---
+- name: host git packages // Show package metadata
+  ansible.builtin.debug:
+    var: item
+  tags:
+    - host
+
+- name: host git packages // Get version of latest release
+  community.general.github_release:
+    user: '{{ item.user }}'
+    repo: '{{ item.repo }}'
+    action: latest_release
+  register: __item_latest_release
+  when: item.version == 'latest'
+  tags:
+    - host
+
+- name: host git packages // Show release version
+  ansible.builtin.debug:
+    var: __item_latest_release.tag
+  tags:
+    - host
+
+- name: host git packages // Download git release
+  ansible.builtin.get_url:
+    url: 'https://github.com/{{ item.user }}/{{ item.repo }}/releases/download/{{ __item_latest_release.tag }}/{{ item.repo }}_{{ __item_latest_release.tag }}_{{ item.arch }}.{{ item.format}}'
+    dest: /var/cache/ansible/{{ item.repo }}_{{ __item_latest_release.tag }}_{{ item.arch }}.{{ item.format}}
+
+- name: host git packages // Install git release (apt)
+  ansible.builtin.apt:
+    deb: /var/cache/ansible/{{ item.repo }}_{{ __item_latest_release.tag }}_{{ item.arch }}.{{ item.format}}
+    state: present
+  when: item.format == 'deb'
+  tags:
+    - host
+
+- name: host git packages // Install git release (yum)
+  ansible.builtin.yum:
+    name: /var/cache/ansible/{{ item.repo }}_{{ __item_latest_release.tag }}_{{ item.arch }}.{{ item.format}}
+    state: present
+  when: item.format == 'rpm'
+  tags:
+    - host
