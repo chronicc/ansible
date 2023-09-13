@@ -2,5 +2,7 @@
 - name: host config // Set hostname
   ansible.builtin.hostname:
     name: '{{ hostname }}'
+  when:
+    - hostname | default(false)
   tags:
     - host
