@@ -1,11 +1,11 @@
 ---
 - name: matrixhook // Create service directory
   ansible.builtin.file:
-    dest: '{{ f_docker__home }}/matrixhook'
+    dest: "{{ f_docker__home }}/matrixhook"
     state: directory
     owner: root
     group: docker
-    mode: '0755'
+    mode: "0755"
   tags:
     - application
     - matrixhook
@@ -13,10 +13,10 @@
 - name: matrixhook // Create docker-compose.yml
   ansible.builtin.template:
     src: templates/matrixhook-docker-compose.yml.j2
-    dest: '{{ f_docker__home }}/matrixhook/docker-compose.yml'
+    dest: "{{ f_docker__home }}/matrixhook/docker-compose.yml"
     owner: root
     group: docker
-    mode: '0644'
+    mode: "0644"
   tags:
     - application
     - matrixhook

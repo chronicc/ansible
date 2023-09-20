@@ -1,11 +1,11 @@
 ---
 - name: roundcube // Create service directory
   ansible.builtin.file:
-    dest: '{{ f_docker__home }}/roundcube'
+    dest: "{{ f_docker__home }}/roundcube"
     state: directory
     owner: root
     group: docker
-    mode: '0755'
+    mode: "0755"
   tags:
     - application
     - roundcube
@@ -13,10 +13,10 @@
 - name: roundcube // Create docker-compose.yml
   ansible.builtin.template:
     src: templates/roundcube-docker-compose.yml.j2
-    dest: '{{ f_docker__home }}/roundcube/docker-compose.yml'
+    dest: "{{ f_docker__home }}/roundcube/docker-compose.yml"
     owner: root
     group: docker
-    mode: '0644'
+    mode: "0644"
   tags:
     - application
     - roundcube
@@ -24,10 +24,10 @@
 - name: roundcube // Create nginx config for proxy container
   ansible.builtin.template:
     src: templates/roundcube-nginx.conf.j2
-    dest: '{{ f_docker__home }}/roundcube/nginx.conf'
+    dest: "{{ f_docker__home }}/roundcube/nginx.conf"
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
   tags:
     - application
     - roundcube

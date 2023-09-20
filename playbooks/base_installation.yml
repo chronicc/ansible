@@ -22,6 +22,6 @@
 
     - name: Include host git packages
       ansible.builtin.include_tasks: features/host_git_packages.yml
-      loop: '{{ h_git_packages | default([]) }}'
+      loop: "{{ h_git_packages | default([]) }}"
       tags:
         - host

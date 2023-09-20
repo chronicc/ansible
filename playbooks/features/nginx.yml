@@ -1,12 +1,12 @@
 ---
 - name: nginx // Install nginx
   ansible.builtin.package:
-    name: '{{ nginx_package }}'
+    name: "{{ nginx_package }}"
     state: present
 
 - name: nginx // Remove the default nginx page
   ansible.builtin.file:
-    dest: '{{ nginx_sites_path }}/default'
+    dest: "{{ nginx_sites_path }}/default"
     state: absent
   notify:
     - Reload nginx

@@ -22,18 +22,18 @@
 
 - name: default toolchain // Install default python packages (package manager)
   ansible.builtin.package:
-    name: '{{ item }}'
+    name: "{{ item }}"
     state: present
-  loop: '{{ python_packages }}'
+  loop: "{{ python_packages }}"
 
 - name: default toolchain // Install default python packages (pip)
   ansible.builtin.pip:
-    name: '{{ item }}'
+    name: "{{ item }}"
     state: present
-  loop: '{{ python_pip_packages }}'
+  loop: "{{ python_pip_packages }}"
 
 - name: default toolchain // Install default packages
   ansible.builtin.package:
-    name: '{{ item }}'
+    name: "{{ item }}"
     state: present
-  loop: '{{ default_packages }}'
+  loop: "{{ default_packages }}"
