@@ -20,6 +20,13 @@
       tags:
         - docker
 
+    - name: Import nerd fonts
+      ansible.builtin.import_role:
+        name: ctorgalson.nerdfonts
+      when: feature_nerdfonts | default(false)
+      tags:
+        - fonts
+
     - name: Include nginx
       ansible.builtin.include_tasks: features/nginx.yml
       when: feature_nginx | default(false)
