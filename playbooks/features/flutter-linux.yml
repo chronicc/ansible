@@ -1,0 +1,31 @@
+---
+- name: flutter // Install dependencies
+  ansible.builtin.package:
+    name: "{{ flutter_dependencies }}"
+    state: present
+
+- name: flutter // Idempotence test
+  ansible.builtin.stat:
+    path: "{{ flutter_install_path }}/bin/flutter"
+  register: __flutter_bin
+
+- name: flutter // Download archive
+  ansible.builtin.get_url:
+    dest: "/var/cache/ansible/flutter_{{ f_flutter__version }}.{{ flutter_archive_format }}"
+    mode: "0644"
+    url: "{{ flutter_archive_url }}"
+  when: not __flutter_bin.stat.exists
+
+- name: flutter // Extract archive
+  ansible.builtin.unarchive:
+    creates: "{{ custom_app_path }}/bin/flutter"
+    dest: "{{ custom_app_path }}"
+    remote_src: yes
+    src: "/var/cache/ansible/flutter_{{ f_flutter__version }}.{{ flutter_archive_format }}"
+  when: not __flutter_bin.stat.exists
+
+- name: flutter // Add to path
+  ansible.builtin.template:
+    dest: /etc/profile.d/flutter.sh
+    mode: "0644"
+    src: templates/flutter-profile.sh.j2

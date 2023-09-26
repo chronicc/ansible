@@ -1,4 +1,5 @@
 ---
+custom_app_path: /opt
 custom_binary_path: /usr/local/bin
 
 default_packages:
@@ -16,6 +17,26 @@ docker_repository_key_url: https://download.docker.com/linux/ubuntu/gpg
 
 docker_compose_package_url: https://github.com/docker/compose/releases/download
 docker_compose_package_name: docker-compose-{{ ansible_system }}-{{ ansible_architecture }}
+
+flutter_archive_format: tar.xz
+flutter_archive_url_base: https://storage.googleapis.com/flutter_infra_release/releases/stable/linux
+flutter_archive_url: "{{ flutter_archive_url_base }}/flutter_linux_{{ f_flutter__version }}-stable.{{ flutter_archive_format }}"
+flutter_dependencies:
+  - bash
+  - clang
+  - cmake
+  - curl
+  - git
+  - libglu1-mesa
+  - libgtk-3-dev
+  - liblzma-dev
+  - libstdc++-12-dev
+  - ninja-build
+  - pkg-config
+  - unzip
+  - xz-utils
+  - zip
+flutter_install_path: "{{ custom_app_path }}/flutter"
 
 python_packages:
   - python3-setuptools

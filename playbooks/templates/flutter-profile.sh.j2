@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+# shellcheck shell=sh
+
+if [ -n {{ flutter_install_path }}/bin/flutter ]; then
+  export PATH=$PATH:{{ flutter_install_path }}/bin
+fi

@@ -20,6 +20,15 @@
       tags:
         - docker
 
+    - name: Import flutter (Linux)
+      ansible.builtin.import_tasks:
+        file: features/flutter-linux.yml
+      when:
+        - ansible_system == "Linux"
+        - feature_flutter | default(false)
+      tags:
+        - flutter
+
     - name: Import nerd fonts
       ansible.builtin.import_role:
         name: ctorgalson.nerdfonts
