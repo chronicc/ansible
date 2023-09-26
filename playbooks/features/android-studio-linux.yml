@@ -1,0 +1,33 @@
+---
+- name: android studio // Idempotence test
+  ansible.builtin.stat:
+    path: "{{ android_studio_install_path }}/bin/studio.sh"
+  register: __android_studio_bin
+
+- name: android studio // Download archive
+  ansible.builtin.get_url:
+    dest: "/var/cache/ansible/android_studio_{{ f_android_studio__version }}.{{ android_studio_archive_format }}"
+    mode: "0644"
+    url: "{{ android_studio_archive_url }}"
+  when: not __android_studio_bin.stat.exists
+
+- name: android studio // Extract archive
+  ansible.builtin.unarchive:
+    creates: "{{ custom_app_path }}/bin/android_studio"
+    dest: "{{ custom_app_path }}"
+    remote_src: yes
+    src: "/var/cache/ansible/android_studio_{{ f_android_studio__version }}.{{ android_studio_archive_format }}"
+  when: not __android_studio_bin.stat.exists
+
+- name: android studio // Add to path
+  ansible.builtin.template:
+    dest: /etc/profile.d/android_studio.sh
+    mode: "0644"
+    src: templates/android-studio-profile.sh.j2
+
+- name: android studio // Add to start menu
+  ansible.builtin.template:
+    dest: /usr/share/applications/android-studio.desktop
+    mode: "0644"
+    src: templates/android-studio.desktop.j2
+  when: is_desktop | default(false)

@@ -2,6 +2,11 @@
 custom_app_path: /opt
 custom_binary_path: /usr/local/bin
 
+android_studio_archive_format: tar.gz
+android_studio_url_base: https://redirector.gvt1.com/edgedl/android/studio/ide-zips
+android_studio_url: "{{ android_studio_url_base }}/{{ f_android_studio__version }}/android-studio-ide-{{ f_android_studio__version }}.{{ android_studio_archive_format }}"
+android_studio_install_path: "{{ custom_app_path }}/android-studio"
+
 default_packages:
   - apt-transport-https
   - bash-completion

@@ -14,6 +14,15 @@
 
     # ---( Features )---
 
+    - name: Import android studio (Linux)
+      ansible.builtin.import_tasks:
+        file: features/android-studio-linux.yml
+      when:
+        - ansible_system == "Linux"
+        - feature_android_studio | default(false)
+      tags:
+        - android-studio
+
     - name: Include docker
       ansible.builtin.include_tasks: features/docker.yml
       when: feature_docker | default(false)

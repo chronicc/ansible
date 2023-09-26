@@ -1,0 +1,6 @@
+# {{ ansible_managed }}
+# shellcheck shell=sh
+
+if [ -n {{ android_studio_install_path }}/bin/studio.sh ]; then
+  export PATH=$PATH:{{ android_studio_install_path }}/bin
+fi
