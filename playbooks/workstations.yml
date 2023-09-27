@@ -1,0 +1,44 @@
+---
+- name: Configure linux workstations
+  hosts: workstations
+  become: yes
+  serial: 10
+
+  roles:
+    - role: init
+    - role: common
+    - role: geerlingguy.docker
+      tags: docker
+    - role: ctorgalson.nerdfonts
+      tags: fonts
+
+  pre_tasks:
+    - name: Fail when not running on linux
+      ansible.builtin.fail:
+        msg: 'This playbook is only intended to run on linux'
+      when: ansible_system != 'Linux'
+
+    - name: Include os specific variables
+      ansible.builtin.include_vars: '{{ item }}'
+      with_first_found:
+        - '{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml'
+        - '{{ ansible_distribution }}.yml'
+      tags:
+        - always
+
+  tasks:
+    - name: Import android studio tasks
+      ansible.builtin.import_tasks:
+        file: features/android_studio_linux.yml
+      when:
+        - feature_android_studio | default(false)
+      tags:
+        - android-studio
+
+    - name: Import flutter tasks
+      ansible.builtin.import_tasks:
+        file: features/flutter_linux.yml
+      when:
+        - feature_flutter | default(false)
+      tags:
+        - flutter

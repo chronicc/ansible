@@ -1,0 +1,10 @@
+---
+- name: Set hostname.
+  ansible.builtin.hostname:
+    name: '{{ inventory_hostname }}'
+
+- name: Install common packages.
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+  loop: '{{ common_packages }}'

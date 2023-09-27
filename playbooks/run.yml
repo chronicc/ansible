@@ -5,10 +5,10 @@
   serial: 10
   tasks:
     - name: Include os specific variables
-      ansible.builtin.include_vars: "{{ item }}"
+      ansible.builtin.include_vars: '{{ item }}'
       with_first_found:
-        - "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
-        - "{{ ansible_distribution }}.yml"
+        - '{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml'
+        - '{{ ansible_distribution }}.yml'
       tags:
         - always
 
@@ -18,7 +18,7 @@
       ansible.builtin.import_tasks:
         file: features/android_studio_linux.yml
       when:
-        - ansible_system == "Linux"
+        - ansible_system == 'Linux'
         - feature_android_studio | default(false)
       tags:
         - android-studio
@@ -27,7 +27,7 @@
       ansible.builtin.import_tasks:
         file: features/docker_linux.yml
       when:
-        - ansible_system == "Linux"
+        - ansible_system == 'Linux'
         - feature_docker | default(false)
       tags:
         - docker
@@ -36,7 +36,7 @@
       ansible.builtin.import_tasks:
         file: features/flutter_linux.yml
       when:
-        - ansible_system == "Linux"
+        - ansible_system == 'Linux'
         - feature_flutter | default(false)
       tags:
         - flutter
@@ -45,7 +45,7 @@
       ansible.builtin.import_role:
         name: ctorgalson.nerdfonts
       when:
-        - ansible_system == "Linux"
+        - ansible_system == 'Linux'
         - feature_nerdfonts | default(false)
       tags:
         - fonts
@@ -54,7 +54,7 @@
       ansible.builtin.import_tasks:
         file: features/nginx.yml
       when:
-        - ansible_system == "Linux"
+        - ansible_system == 'Linux'
         - feature_nginx | default(false)
       tags:
         - application
@@ -64,7 +64,7 @@
       ansible.builtin.import_tasks:
         file: features/traefik.yml
       when:
-        - ansible_system == "Linux"
+        - ansible_system == 'Linux'
         - feature_traefik | default(false)
       tags:
         - application
@@ -145,7 +145,7 @@
 
     - name: Restart loki
       community.docker.docker_compose:
-        project_src: "{{ f_docker__home }}/loki"
+        project_src: '{{ f_docker__home }}/loki'
         restarted: yes
       tags:
         - application

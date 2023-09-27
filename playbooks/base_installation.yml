@@ -12,14 +12,6 @@
       tags:
         - always
 
-    - name: Include host configuration
-      ansible.builtin.include_tasks: features/host_config.yml
-      tags:
-        - host
-
-    - name: Include default toolchain
-      ansible.builtin.include_tasks: features/default_toolchain.yml
-
     - name: Include host git packages
       ansible.builtin.include_tasks: features/host_git_packages.yml
       loop: "{{ h_git_packages | default([]) }}"

@@ -8,15 +8,6 @@ android_studio_url_app: "{{ f_android_studio__version }}/android-studio-ide-{{ f
 android_studio_url: "{{ android_studio_url_base }}/{{ android_studio_url_app }}"
 android_studio_install_path: "{{ custom_app_path }}/android-studio"
 
-default_packages:
-  - apt-transport-https
-  - bash-completion
-  - curl
-  - git
-  - htop
-  - mlocate
-  - vim
-
 docker_package: docker-ce
 docker_repository: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable'
 docker_repository_key_url: https://download.docker.com/linux/ubuntu/gpg
@@ -43,16 +34,6 @@ flutter_dependencies:
   - xz-utils
   - zip
 flutter_install_path: "{{ custom_app_path }}/flutter"
-
-python_packages:
-  - python3-pip
-  - python3-setuptools
-  - python3.10
-  - python3.10-minimal
-  - python3.10-venv
-
-python_pip_packages:
-  - github3.py
 
 nginx_certificates_path: /etc/nginx/certs
 nginx_package: nginx
