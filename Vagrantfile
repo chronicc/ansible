@@ -2,27 +2,8 @@ require_relative './vagrant_plugins/key_authorization'
 
 Vagrant.configure('2') do |config|
 
-  CENTOS_6_BOX_IMAGE = ENV['AW_CENTOS_6_BOX_IMAGE']
-  CENTOS_6_HOSTNAME = ENV['AW_CENTOS_6_HOSTNAME']
-  CENTOS_7_BOX_IMAGE = ENV['AW_CENTOS_7_BOX_IMAGE']
-  CENTOS_7_HOSTNAME = ENV['AW_CENTOS_7_HOSTNAME']
-  CENTOS_8_BOX_IMAGE = ENV['AW_CENTOS_8_BOX_IMAGE']
-  CENTOS_8_HOSTNAME = ENV['AW_CENTOS_8_HOSTNAME']
-  UBUNTU_1804_BOX_IMAGE = ENV['AW_UBUNTU_1804_BOX_IMAGE']
-  UBUNTU_1804_HOSTNAME = ENV['AW_UBUNTU_1804_HOSTNAME']
-  UBUNTU_2004_BOX_IMAGE = ENV['AW_UBUNTU_2004_BOX_IMAGE']
-  UBUNTU_2004_HOSTNAME = ENV['AW_UBUNTU_2004_HOSTNAME']
-  UBUNTU_2204_BOX_IMAGE = ENV['AW_UBUNTU_2204_BOX_IMAGE']
-  UBUNTU_2204_HOSTNAME = ENV['AW_UBUNTU_2204_HOSTNAME']
-  WINDOWS_SERVER_2022_BOX_IMAGE = ENV['AW_WINDOWS_SERVER_2022_BOX_IMAGE']
-  WINDOWS_SERVER_2022_HOSTNAME = ENV['AW_WINDOWS_SERVER_2022_HOSTNAME']
-  
-  CPUS = ENV['AW_VM_CPUS']
-  MEMORY = ENV['AW_VM_MEMORY']
+  authorize_key_for_root config, ENV['ANSIBLE_SSH_PUBLIC_KEY_PATH']
 
-  authorize_key_for_root config, ENV['AW_SSH_PUBLIC_KEY_PATH']
-
-  config.vm.provider "libvirt"
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = true
@@ -32,56 +13,59 @@ Vagrant.configure('2') do |config|
     'vagrant-hostmanager',
     'vagrant-libvirt',
   ]
+  config.vm.provider "libvirt"
+  config.winrm.max_tries = 300
+  config.winrm.retry_delay = 2
 
   #---( Generic Machines )----------------------------------------------------
 
-  config.vm.define "#{CENTOS_6_HOSTNAME}" do |host|
-    host.vm.box = CENTOS_6_BOX_IMAGE
+  config.vm.define "#{ENV['ANSIBLE_CENTOS_6_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_CENTOS_6_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{CENTOS_6_HOSTNAME}.vagrant"
+    host.vm.hostname = "#{ENV['ANSIBLE_CENTOS_6_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{CENTOS_7_HOSTNAME}" do |host|
-    host.vm.box = CENTOS_7_BOX_IMAGE
+  config.vm.define "#{ENV['ANSIBLE_CENTOS_7_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_CENTOS_7_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{CENTOS_7_HOSTNAME}.vagrant"
+    host.vm.hostname = "#{ENV['ANSIBLE_CENTOS_7_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{CENTOS_8_HOSTNAME}" do |host|
-    host.vm.box = CENTOS_8_BOX_IMAGE
+  config.vm.define "#{ENV['ANSIBLE_CENTOS_8_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_CENTOS_8_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{CENTOS_8_HOSTNAME}.vagrant"
+    host.vm.hostname = "#{ENV['ANSIBLE_CENTOS_8_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{UBUNTU_1804_HOSTNAME}" do |host|
-    host.vm.box = UBUNTU_1804_BOX_IMAGE
+  config.vm.define "#{ENV['ANSIBLE_UBUNTU_1804_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_UBUNTU_1804_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{UBUNTU_1804_HOSTNAME}.vagrant"
+    host.vm.hostname = "#{ENV['ANSIBLE_UBUNTU_1804_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{UBUNTU_2004_HOSTNAME}" do |host|
-    host.vm.box = UBUNTU_2004_BOX_IMAGE
+  config.vm.define "#{ENV['ANSIBLE_UBUNTU_2004_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_UBUNTU_2004_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{UBUNTU_2004_HOSTNAME}.vagrant"
+    host.vm.hostname = "#{ENV['ANSIBLE_UBUNTU_2004_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{UBUNTU_2204_HOSTNAME}" do |host|
-    host.vm.box = UBUNTU_2204_BOX_IMAGE
+  config.vm.define "#{ENV['ANSIBLE_UBUNTU_2204_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_UBUNTU_2204_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{UBUNTU_2204_HOSTNAME}.vagrant"
+    host.vm.hostname = "#{ENV['ANSIBLE_UBUNTU_2204_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{WINDOWS_SERVER_2022_HOSTNAME}" do |host|
-    host.vm.box = WINDOWS_SERVER_2022_BOX_IMAGE
+  config.vm.define "#{ENV['ANSIBLE_WINDOWS_SERVER_2022_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_WINDOWS_SERVER_2022_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{WINDOWS_SERVER_2022_HOSTNAME}"
+    host.vm.hostname = "#{ENV['ANSIBLE_WINDOWS_SERVER_2022_HOSTNAME']}"
   end
 
   #---( Application Specific Machines )---------------------------------------
 
   (1..3).each do |machine_id|
     config.vm.define "hadoop-#{machine_id}" do |host|
-      host.vm.box = ENV['AW_HADOOP_BOX_IMAGE']
+      host.vm.box = ENV['ANSIBLE_HADOOP_BOX_IMAGE']
       host.vm.network 'private_network', type: 'dhcp'
       host.vm.hostname = "hadoop-#{machine_id}.vagrant"
     end
@@ -90,13 +74,13 @@ Vagrant.configure('2') do |config|
   #---( Resource Setup )------------------------------------------------------
 
   config.vm.provider :libvirt do |vm|
-    vm.cpus = CPUS
-    vm.memory = MEMORY
+    vm.cpus = ENV['ANSIBLE_VM_CPUS']
+    vm.memory = ENV['ANSIBLE_VM_MEMORY']
   end
 
   config.vm.provider :virtualbox do |vm|
-    vm.customize ["modifyvm", :id, "--memory", MEMORY]
-    vm.customize ["modifyvm", :id, "--cpus", CPUS]
+    vm.customize ["modifyvm", :id, "--memory", ENV['ANSIBLE_VM_MEMORY']]
+    vm.customize ["modifyvm", :id, "--cpus", ENV['ANSIBLE_VM_CPUS']]
   end
 
 end
