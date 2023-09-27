@@ -6,16 +6,10 @@
     owner: root
     group: docker
     mode: "0755"
-  tags:
-    - application
-    - traefik
 
 - name: traefik // Create docker network
   community.docker.docker_network:
     name: traefik
-  tags:
-    - application
-    - traefik
 
 - name: traefik // Create docker-compose.yml
   ansible.builtin.template:
@@ -24,13 +18,7 @@
     owner: root
     group: docker
     mode: "0644"
-  tags:
-    - application
-    - traefik
 
 - name: traefik // Update deployment
   community.docker.docker_compose:
     project_src: "{{ f_docker__home }}/traefik"
-  tags:
-    - application
-    - traefik

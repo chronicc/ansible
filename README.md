@@ -1,6 +1,6 @@
 # Ansible
 
-A collection of ansible playbooks for managing my infrastructure.
+A collection of ansible playbooks for managing my infrastructure and testing.
 
 ## Getting started
 

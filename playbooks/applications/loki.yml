@@ -9,9 +9,6 @@
   loop:
     - loki
     - loki/config
-  tags:
-    - application
-    - loki
 
 - name: loki // Write promtail config
   ansible.builtin.template:
@@ -21,9 +18,6 @@
     group: root
     mode: "0644"
   notify: Restart loki
-  tags:
-    - application
-    - loki
 
 - name: loki // Create docker-compose.yml
   ansible.builtin.template:
@@ -32,13 +26,7 @@
     owner: root
     group: root
     mode: "0644"
-  tags:
-    - application
-    - loki
 
 - name: loki // Update deployment
   community.docker.docker_compose:
     project_src: "{{ f_docker__home }}/loki"
-  tags:
-    - application
-    - loki

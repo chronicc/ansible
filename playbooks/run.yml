@@ -16,50 +16,65 @@
 
     - name: Import android studio (Linux)
       ansible.builtin.import_tasks:
-        file: features/android-studio-linux.yml
+        file: features/android_studio_linux.yml
       when:
         - ansible_system == "Linux"
         - feature_android_studio | default(false)
       tags:
         - android-studio
 
-    - name: Include docker
-      ansible.builtin.include_tasks: features/docker.yml
-      when: feature_docker | default(false)
+    - name: Import docker (Linux)
+      ansible.builtin.import_tasks:
+        file: features/docker_linux.yml
+      when:
+        - ansible_system == "Linux"
+        - feature_docker | default(false)
       tags:
         - docker
 
     - name: Import flutter (Linux)
       ansible.builtin.import_tasks:
-        file: features/flutter-linux.yml
+        file: features/flutter_linux.yml
       when:
         - ansible_system == "Linux"
         - feature_flutter | default(false)
       tags:
         - flutter
 
-    - name: Import nerd fonts
+    - name: Import nerd fonts (Linux)
       ansible.builtin.import_role:
         name: ctorgalson.nerdfonts
-      when: feature_nerdfonts | default(false)
+      when:
+        - ansible_system == "Linux"
+        - feature_nerdfonts | default(false)
       tags:
         - fonts
 
-    - name: Include nginx
-      ansible.builtin.include_tasks: features/nginx.yml
-      when: feature_nginx | default(false)
+    - name: Import nginx (Linux)
+      ansible.builtin.import_tasks:
+        file: features/nginx.yml
+      when:
+        - ansible_system == "Linux"
+        - feature_nginx | default(false)
+      tags:
+        - application
+        - nginx
 
-    - name: Include traefik
-      ansible.builtin.include_tasks: features/traefik.yml
-      when: feature_traefik | default(false)
+    - name: Import traefik (Linux)
+      ansible.builtin.import_tasks:
+        file: features/traefik.yml
+      when:
+        - ansible_system == "Linux"
+        - feature_traefik | default(false)
       tags:
         - application
         - traefik
 
     # ---( Applications )---
 
-    - name: Include kimai
-      ansible.builtin.include_tasks: applications/kimai.yml
+    - name: Import kimai
+      ansible.builtin.import_tasks:
+        file: applications/kimai.yml
       when:
         - app_kimai | default(false)
         - feature_docker | default(false)
@@ -68,8 +83,9 @@
         - application
         - kimai
 
-    - name: Include loki
-      ansible.builtin.include_tasks: applications/loki.yml
+    - name: Import loki
+      ansible.builtin.import_tasks:
+        file: applications/loki.yml
       when:
         - app_loki | default(false)
         - feature_docker | default(false)
@@ -78,8 +94,9 @@
         - application
         - loki
 
-    - name: Include matrixhook
-      ansible.builtin.include_tasks: applications/matrixhook.yml
+    - name: Import matrixhook
+      ansible.builtin.import_tasks:
+        file: applications/matrixhook.yml
       when:
         - app_matrixhook | default(false)
         - feature_docker | default(false)
@@ -88,8 +105,9 @@
         - application
         - matrixhook
 
-    - name: Include nextcloud
-      ansible.builtin.include_tasks: applications/nextcloud.yml
+    - name: Import nextcloud
+      ansible.builtin.import_tasks:
+        file: applications/nextcloud.yml
       when:
         - app_nextcloud | default(false)
         - feature_docker | default(false)
@@ -98,8 +116,9 @@
         - application
         - nextcloud
 
-    - name: Include roundcube
-      ansible.builtin.include_tasks: applications/roundcube.yml
+    - name: Import roundcube
+      ansible.builtin.import_tasks:
+        file: applications/roundcube.yml
       when:
         - app_roundcube | default(false)
         - feature_docker | default(false)

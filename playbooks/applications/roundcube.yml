@@ -6,9 +6,6 @@
     owner: root
     group: docker
     mode: "0755"
-  tags:
-    - application
-    - roundcube
 
 - name: roundcube // Create docker-compose.yml
   ansible.builtin.template:
@@ -17,9 +14,6 @@
     owner: root
     group: docker
     mode: "0644"
-  tags:
-    - application
-    - roundcube
 
 - name: roundcube // Create nginx config for proxy container
   ansible.builtin.template:
@@ -28,13 +22,7 @@
     owner: root
     group: root
     mode: "0644"
-  tags:
-    - application
-    - roundcube
 
 - name: roundcube // Update deployment
   community.docker.docker_compose:
     project_src: "{{ f_docker__home }}/roundcube"
-  tags:
-    - application
-    - roundcube
