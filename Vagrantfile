@@ -37,6 +37,42 @@ Vagrant.configure('2') do |config|
     host.vm.hostname = "#{ENV['ANSIBLE_CENTOS_8_HOSTNAME']}.vagrant"
   end
 
+  config.vm.define "#{ENV['ANSIBLE_DEBIAN_10_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_DEBIAN_10_BOX_IMAGE']
+    host.vm.network 'private_network', type: 'dhcp'
+    host.vm.hostname = "#{ENV['ANSIBLE_DEBIAN_10_HOSTNAME']}.vagrant"
+  end
+
+  config.vm.define "#{ENV['ANSIBLE_DEBIAN_11_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_DEBIAN_11_BOX_IMAGE']
+    host.vm.network 'private_network', type: 'dhcp'
+    host.vm.hostname = "#{ENV['ANSIBLE_DEBIAN_11_HOSTNAME']}.vagrant"
+  end
+
+  config.vm.define "#{ENV['ANSIBLE_DEBIAN_12_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_DEBIAN_12_BOX_IMAGE']
+    host.vm.network 'private_network', type: 'dhcp'
+    host.vm.hostname = "#{ENV['ANSIBLE_DEBIAN_12_HOSTNAME']}.vagrant"
+  end
+
+  config.vm.define "#{ENV['ANSIBLE_FEDORA_36_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_FEDORA_36_BOX_IMAGE']
+    host.vm.network 'private_network', type: 'dhcp'
+    host.vm.hostname = "#{ENV['ANSIBLE_FEDORA_36_HOSTNAME']}.vagrant"
+  end
+
+  config.vm.define "#{ENV['ANSIBLE_FEDORA_37_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_FEDORA_37_BOX_IMAGE']
+    host.vm.network 'private_network', type: 'dhcp'
+    host.vm.hostname = "#{ENV['ANSIBLE_FEDORA_37_HOSTNAME']}.vagrant"
+  end
+
+  config.vm.define "#{ENV['ANSIBLE_FEDORA_38_HOSTNAME']}" do |host|
+    host.vm.box = ENV['ANSIBLE_FEDORA_38_BOX_IMAGE']
+    host.vm.network 'private_network', type: 'dhcp'
+    host.vm.hostname = "#{ENV['ANSIBLE_FEDORA_38_HOSTNAME']}.vagrant"
+  end
+
   config.vm.define "#{ENV['ANSIBLE_UBUNTU_1804_HOSTNAME']}" do |host|
     host.vm.box = ENV['ANSIBLE_UBUNTU_1804_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
