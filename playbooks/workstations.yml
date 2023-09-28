@@ -17,6 +17,8 @@
       ansible.builtin.fail:
         msg: 'This playbook is only intended to run on linux'
       when: ansible_system != 'Linux'
+      tags:
+        - always
 
     - name: Include os specific variables
       ansible.builtin.include_vars: '{{ item }}'
