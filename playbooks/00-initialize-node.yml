@@ -1,0 +1,33 @@
+---
+- name: Base installation playbook
+  hosts: all
+  become: yes
+  serial: 10
+  pre_tasks:
+    - name: Fail when not running on linux
+      ansible.builtin.fail:
+        msg: 'This playbook is only intended to run on linux'
+      when: ansible_system != 'Linux'
+      tags:
+        - always
+
+    - name: Include OS-specific variables
+      ansible.builtin.include_vars: '{{ item }}'
+      with_first_found:
+        - '{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml'
+        - '{{ ansible_distribution }}.yml'
+      tags:
+        - always
+
+  roles:
+    - role: init
+      tags: always
+    - role: common
+      tags: always
+
+  tasks:
+    - name: Include host git packages
+      ansible.builtin.include_tasks: features/host_git_packages.yml
+      loop: '{{ h_git_packages | default([]) }}'
+      tags:
+        - host

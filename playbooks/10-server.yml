@@ -1,10 +1,10 @@
 ---
-- name: Configure servers
+- name: Configure all servers.
   hosts: servers
   become: yes
   serial: 10
-  tasks:
-    - name: Include os specific variables
+  pre_tasks:
+    - name: Include OS-specific variables
       ansible.builtin.include_vars: '{{ item }}'
       with_first_found:
         - '{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml'
@@ -12,8 +12,12 @@
       tags:
         - always
 
+  tasks:
+
     # ---( Features )---
 
+    # Don't use the geerlinguy.docker here since docker-compose
+    # needs to be installed with pip for the docker_compose module to work.
     - name: Import docker (Linux)
       ansible.builtin.import_tasks:
         file: features/docker_linux.yml
@@ -99,6 +103,16 @@
       tags:
         - application
         - roundcube
+
+    - name: Import valheim
+      ansible.builtin.import_tasks:
+        file: applications/valheim.yml
+      when:
+        - app_valheim | default(false)
+        - feature_docker | default(false)
+      tags:
+        - application
+        - valheim
 
   handlers:
     - name: Reload nginx
