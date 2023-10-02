@@ -4,14 +4,6 @@
   become: yes
   serial: 10
 
-  roles:
-    - role: init
-    - role: common
-    - role: geerlingguy.docker
-      tags: docker
-    - role: ctorgalson.nerdfonts
-      tags: fonts
-
   pre_tasks:
     - name: Fail when not running on linux
       ansible.builtin.fail:
@@ -20,13 +12,23 @@
       tags:
         - always
 
-    - name: Include os specific variables
+    - name: Include OS-specific variables
       ansible.builtin.include_vars: '{{ item }}'
       with_first_found:
         - '{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml'
         - '{{ ansible_distribution }}.yml'
       tags:
         - always
+
+  roles:
+    - role: init
+      tags: always
+    - role: common
+      tags: always
+    - role: geerlingguy.docker
+      tags: docker
+    - role: ctorgalson.nerdfonts
+      tags: fonts
 
   tasks:
     - name: Import android studio tasks
