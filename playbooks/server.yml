@@ -1,6 +1,6 @@
 ---
-- name: Main ansible playbook
-  hosts: all
+- name: Configure servers
+  hosts: servers
   become: yes
   serial: 10
   tasks:
@@ -14,15 +14,6 @@
 
     # ---( Features )---
 
-    - name: Import android studio (Linux)
-      ansible.builtin.import_tasks:
-        file: features/android_studio_linux.yml
-      when:
-        - ansible_system == 'Linux'
-        - feature_android_studio | default(false)
-      tags:
-        - android-studio
-
     - name: Import docker (Linux)
       ansible.builtin.import_tasks:
         file: features/docker_linux.yml
@@ -31,24 +22,6 @@
         - feature_docker | default(false)
       tags:
         - docker
-
-    - name: Import flutter (Linux)
-      ansible.builtin.import_tasks:
-        file: features/flutter_linux.yml
-      when:
-        - ansible_system == 'Linux'
-        - feature_flutter | default(false)
-      tags:
-        - flutter
-
-    - name: Import nerd fonts (Linux)
-      ansible.builtin.import_role:
-        name: ctorgalson.nerdfonts
-      when:
-        - ansible_system == 'Linux'
-        - feature_nerdfonts | default(false)
-      tags:
-        - fonts
 
     - name: Import nginx (Linux)
       ansible.builtin.import_tasks:
