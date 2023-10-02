@@ -104,6 +104,17 @@
         - application
         - roundcube
 
+    - name: Import teamspeak-server
+      ansible.builtin.import_tasks:
+        file: applications/teamspeak-server.yml
+      when:
+        - app_teamspeak_server | default(false)
+        - feature_docker | default(false)
+        - feature_traefik | default(false)
+      tags:
+        - application
+        - teamspeak-server
+
     - name: Import valheim
       ansible.builtin.import_tasks:
         file: applications/valheim.yml

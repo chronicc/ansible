@@ -1,0 +1,20 @@
+---
+- name: teamspeak-server // Create service directory
+  ansible.builtin.file:
+    dest: "{{ f_docker__home }}/teamspeak"
+    state: directory
+    owner: root
+    group: docker
+    mode: "0755"
+
+- name: teamspeak-server // Create docker-compose.yml
+  ansible.builtin.template:
+    src: templates/teamspeak-docker-compose.yml.j2
+    dest: "{{ f_docker__home }}/teamspeak/docker-compose.yml"
+    owner: root
+    group: docker
+    mode: "0644"
+
+- name: teamspeak-server // Update deployment
+  community.docker.docker_compose:
+    project_src: "{{ f_docker__home }}/teamspeak"
