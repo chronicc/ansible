@@ -14,6 +14,10 @@ services:
       - data:/opt/valheim
       - worlds:/home/valheim/.config/unity3d/IronGate/Valheim/worlds_local
     environment:
+      ADMINLIST_IDS: "{{ a_valheim__adminlist_ids | default('') }}"
+      BACKUPS_CRON: "{{ a_valheim__backups_cron | default('0 * * * *') }}"
+      BANNEDLIST_IDS: "{{ a_valheim__bannedlist_ids | default('') }}"
+      PERMITTEDLIST_IDS: "{{ a_valheim__permittedlist_ids | default('') }}"
       SERVER_NAME: "{{ a_valheim__server_name | default('Valheim Server') }}"
       SERVER_PASS: "{{ a_valheim__server_password | default('') }}"
       SERVER_PUBLIC: "{{ a_valheim__server_public | default('0') }}"
