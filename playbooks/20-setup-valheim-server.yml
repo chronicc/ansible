@@ -1,0 +1,29 @@
+---
+- name: Setup a Valheim server.
+  hosts: all
+  become: yes
+  serial: 10
+  pre_tasks:
+    - name: Include OS-specific variables.
+      ansible.builtin.include_vars: '{{ item }}'
+      with_first_found:
+        - '{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml'
+        - '{{ ansible_distribution }}.yml'
+
+  tasks:
+    - name: Import docker (Linux)
+      ansible.builtin.import_tasks:
+        file: features/docker_linux.yml
+      when:
+        - ansible_system == 'Linux'
+      tags:
+        - docker
+
+    - name: Import valheim tasks.
+      ansible.builtin.import_tasks:
+        file: applications/valheim.yml
+      when:
+        - ansible_system == 'Linux'
+      tags:
+        - application
+        - valheim
