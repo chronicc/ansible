@@ -1,0 +1,79 @@
+# {{ ansible_managed }}
+---
+version: '3.8'
+
+services:
+  mattermost:
+    image: mattermost/mattermost-team-edition:{{ a_mattermost_image_tag | default('latest') }}
+    labels:
+      - traefik.docker.network=traefik
+      - traefik.enable={{ a_mattermost__routing_enabled }}
+      - traefik.http.middlewares.mattermost-headers.headers.STSIncludeSubdomains=true
+      - traefik.http.middlewares.mattermost-headers.headers.STSSeconds=31536000
+      - traefik.http.routers.mattermost.entrypoints=websecure
+      - traefik.http.routers.mattermost.middlewares=mattermost-headers
+      - traefik.http.routers.mattermost.rule=Host(`{{ a_mattermost__service_fqdn }}`)
+      - traefik.http.routers.mattermost.tls.certresolver=letsencrypt
+      - traefik.http.routers.mattermost.tls=true
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 200
+    tmpfs:
+      - /tmp
+    volumes:
+      - config:/mattermost/config:rw
+      - data:/mattermost/data:rw
+      - logs:/mattermost/logs:rw
+      - plugins:/mattermost/plugins:rw
+      - client_plugins:/mattermost/client/plugins:rw
+      - bleve_indexes:/mattermost/bleve-indexes:rw
+      # When you want to use SSO with GitLab, you have to add the cert pki chain of GitLab inside Alpine
+      # to avoid Token request failed: certificate signed by unknown authority
+      # (link: https://github.com/mattermost/mattermost-server/issues/13059 and https://github.com/mattermost/docker/issues/34)
+      # - ${GITLAB_PKI_CHAIN_PATH}:/etc/ssl/certs/pki_chain.pem:ro
+    environment:
+      TZ: {{ a_mattermost__timezone | default('UTC') }}
+      MM_SQLSETTINGS_DRIVERNAME: postgres
+      MM_SQLSETTINGS_DATASOURCE: postgres://mattermost:{{ a_mattermost__db_password }}@db:5432/mattermost?sslmode=disable&connect_timeout=10
+      MM_BLEVESETTINGS_INDEXDIR: /mattermost/bleve-indexes
+      MM_SERVICESETTINGS_SITEURL: https://{{ a_mattermost__service_fqdn }}
+    networks:
+      - traefik
+      - default
+    ports:
+      - 8443:8443/udp
+      - 8443:8443/tcp
+    restart: unless-stopped
+
+  db:
+    image: postgres
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 100
+    tmpfs:
+      - /tmp
+      - /var/run/postgresql
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      TZ: {{ a_mattermost__timezone | default('UTC') }}
+      POSTGRES_USER: mattermost
+      POSTGRES_PASSWORD: {{ a_mattermost__db_password }}
+      POSTGRES_DB: mattermost
+    networks:
+      - default
+    restart: unless-stopped
+
+volumes:
+  bleve_indexes:
+  client_plugins:
+  config:
+  data:
+  db_data:
+  logs:
+  plugins:
+
+networks:
+  traefik:
+    name: traefik
+    external: true

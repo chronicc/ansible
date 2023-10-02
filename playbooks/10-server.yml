@@ -82,6 +82,17 @@
         - application
         - matrixhook
 
+    - name: Import mattermost-server
+      ansible.builtin.import_tasks:
+        file: applications/mattermost-server.yml
+      when:
+        - app_mattermost_server | default(false)
+        - feature_docker | default(false)
+        - feature_traefik | default(false)
+      tags:
+        - application
+        - mattermost-server
+
     - name: Import nextcloud
       ansible.builtin.import_tasks:
         file: applications/nextcloud.yml
