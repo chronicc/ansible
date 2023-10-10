@@ -8,10 +8,8 @@ services:
     labels:
       - traefik.docker.network=traefik
       - traefik.enable={{ a_mattermost__routing_enabled }}
-      - traefik.http.middlewares.mattermost-headers.headers.STSIncludeSubdomains=true
-      - traefik.http.middlewares.mattermost-headers.headers.STSSeconds=31536000
       - traefik.http.routers.mattermost.entrypoints=websecure
-      - traefik.http.routers.mattermost.middlewares=mattermost-headers
+      - traefik.http.routers.mattermost.middlewares=sts-headers
       - traefik.http.routers.mattermost.rule=Host(`{{ a_mattermost__service_fqdn }}`)
       - traefik.http.routers.mattermost.tls.certresolver=letsencrypt
       - traefik.http.routers.mattermost.tls=true

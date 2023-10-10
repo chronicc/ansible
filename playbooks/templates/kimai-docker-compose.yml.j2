@@ -47,6 +47,7 @@ services:
       - traefik.docker.network=traefik
       - traefik.enable={{ a_kimai__routing_enabled }}
       - traefik.http.routers.kimai.entrypoints=websecure
+      - traefik.http.routers.kimai.middlewares=sts-headers
       - traefik.http.routers.kimai.rule=Host(`{{ a_kimai__service_fqdn }}`)
       - traefik.http.routers.kimai.tls.certresolver=letsencrypt
       - traefik.http.routers.kimai.tls=true
