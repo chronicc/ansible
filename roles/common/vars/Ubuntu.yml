@@ -6,4 +6,6 @@ common_packages:
   - htop
   - make
   - mlocate
+  - unzip
   - vim
+  - zip
