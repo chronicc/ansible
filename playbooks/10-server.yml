@@ -12,6 +12,11 @@
       tags:
         - always
 
+  roles:
+    - role: derJD.journald
+      tags:
+        - journal
+
   tasks:
 
     # ---( Features )---

@@ -9,3 +9,5 @@ roles:
     version: v1.0.1
   - name: geerlingguy.docker
     version: 6.2.0
+  - name: derJD.journald
+    version: 0.0.1
