@@ -4,8 +4,10 @@ common_packages:
   - curl
   - git
   - htop
+  - iotop
   - make
   - mlocate
+  - tig
   - unzip
   - vim
   - zip

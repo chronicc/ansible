@@ -8,3 +8,15 @@
     name: '{{ item }}'
     state: present
   loop: '{{ common_packages }}'
+
+- name: Install group specific packages.
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+  loop: '{{ common_group_packages }}'
+
+- name: Install host specific packages.
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+  loop: '{{ common_host_packages }}'
