@@ -27,3 +27,11 @@
       tags:
         - application
         - valheim
+
+  handlers:
+    - name: Restart docker
+      ansible.builtin.service:
+        name: docker
+        state: restarted
+      tags:
+        - docker
