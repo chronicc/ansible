@@ -131,6 +131,17 @@
         - application
         - roundcube
 
+    - name: Import seatable
+      ansible.builtin.import_tasks:
+        file: applications/seatable.yml
+      when:
+        - app_seatable | default(false)
+        - feature_docker | default(false)
+        - feature_traefik | default(false)
+      tags:
+        - application
+        - seatable
+
     - name: Import teamspeak-server
       ansible.builtin.import_tasks:
         file: applications/teamspeak-server.yml

@@ -1,0 +1,58 @@
+# {{ ansible_managed }}
+---
+version: '3.8'
+
+services:
+  db:
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD={{ a_seatable__mysql_root_password }}
+      - MYSQL_LOG_CONSOLE=true
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - default
+    restart: unless-stopped
+
+  memcached:
+    image: memcached
+    entrypoint: memcached -m 256
+    networks:
+      - default
+    restart: unless-stopped
+
+  redis:
+    image: redis
+    networks:
+      - default
+    restart: unless-stopped
+
+  seatable:
+    image: seatable/seatable-developer:{{ a_seatable__image_tag | default('latest') }}
+    labels:
+      - traefik.docker.network=traefik
+      - traefik.enable={{ a_seatable__routing_enabled | default('true') }}
+      - traefik.http.routers.seatable.entrypoints=websecure
+      - traefik.http.routers.seatable.middlewares=sts-headers
+      - traefik.http.routers.seatable.rule=Host(`{{ a_seatable__service_fqdn }}`)
+      - traefik.http.routers.seatable.tls.certresolver=letsencrypt
+      - traefik.http.routers.seatable.tls=true
+    environment:
+      - DB_HOST=db
+      - DB_ROOT_PASSWD={{ a_seatable__mysql_root_password }}
+      - SEATABLE_SERVER_HOSTNAME=tables.kurthos.com
+      - TIME_ZONE=Europe/Berlin
+    volumes:
+      - data:/shared
+    networks:
+      - default
+    restart: unless-stopped
+
+volumes:
+  data:
+  db:
+
+networks:
+  traefik:
+    name: traefik
+    external: true
