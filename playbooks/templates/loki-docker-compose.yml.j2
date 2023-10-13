@@ -25,6 +25,21 @@ services:
       - default
     restart: unless-stopped
 
+  prometheus:
+    image: prom/prometheus:{{ a_loki__prometheus_image_tag }}
+    command: |
+      --config.file=/etc/prometheus/prometheus.yml
+      --storage.tsdb.path=/prometheus
+      --storage.tsdb.retention.time={{ a_loki__prometheus_retention_time | default('15d') }}
+      --storage.tsdb.wal-compression
+      --web.console.libraries=/usr/share/prometheus/console_libraries
+      --web.console.templates=/usr/share/prometheus/consoles
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - default
+    restart: unless-stopped
+
   grafana:
     environment:
       - GF_INSTALL_PLUGINS=grafana-clock-panel
@@ -50,6 +65,14 @@ services:
           url: http://loki:3100
           basicAuth: false
           isDefault: true
+          version: 1
+          editable: false
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          orgId: 1
+          url: http://prometheus:9090
+          basicAuth: false
           version: 1
           editable: false
         EOF
