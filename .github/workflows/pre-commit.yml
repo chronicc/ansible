@@ -1,0 +1,45 @@
+name: pre-commit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Create ansible home directory
+        run: |
+          mkdir -p ~/.ansible
+
+      # - name: Cache poetry dependencies
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.cache/pypoetry/virtualenvs
+      #     key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+
+      # - uses: Gr1N/setup-poetry@v8
+
+      - name: Cache ansible roles
+        uses: actions/cache@v3
+        with:
+          path: ~/.ansible/roles
+          key: ${{ runner.os }}-poetry-${{ hashFiles('requirements.yml') }}
+
+      - name: Install ansible roles
+        run: |
+          ansible-galaxy install -r requirements.yml
+
+      - name: Create vault file
+        run: |
+          echo "{{ secrets.ANSIBLE_VAULT_PASSWORD }}" > ~/.ansible/chronicc-vault-pass
+
+      - uses: pre-commit/action@v3.0.0
