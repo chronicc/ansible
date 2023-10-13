@@ -10,10 +10,28 @@
     - loki
     - loki/config
 
+- name: loki // Write loki config
+  ansible.builtin.template:
+    src: templates/config/loki.local-config.yml.j2
+    dest: "{{ f_docker__home }}/loki/config/loki.local-config.yml"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart loki
+
 - name: loki // Write promtail config
   ansible.builtin.template:
     src: templates/config/promtail.config.yml.j2
     dest: "{{ f_docker__home }}/loki/config/promtail.yml"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart loki
+
+- name: loki // Write promtheus config
+  ansible.builtin.template:
+    src: templates/config/prometheus.yml.j2
+    dest: "{{ f_docker__home }}/loki/config/prometheus.yml"
     owner: root
     group: root
     mode: "0644"

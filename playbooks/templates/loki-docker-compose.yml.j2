@@ -1,24 +1,29 @@
+# {{ ansible_managed }}
+---
 version: '3.8'
 
 services:
   loki:
-    command: -config.file=/etc/loki/local-config.yaml
     image: grafana/loki:{{ a_loki__loki_image_tag }}
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./config/loki.local-config.yml:/etc/loki/local-config.yaml
+      - loki_data:/loki
     networks:
       - default
     restart: unless-stopped
 
   promtail:
-    command: -config.file=/etc/promtail/config.yml
     image: grafana/promtail:{{ a_loki__promtail_image_tag}}
-    networks:
-      - default
-    restart: unless-stopped
+    command: -config.file=/etc/promtail/config.yml
     volumes:
       - ./config/promtail.yml:/etc/promtail/config.yml
       - /var/lib/docker:/var/lib/docker:ro
       - /var/log:/var/log:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - default
+    restart: unless-stopped
 
   grafana:
     environment:
@@ -75,3 +80,4 @@ networks:
 volumes:
   grafana_config:
   grafana_data:
+  loki_data:
