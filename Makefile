@@ -3,4 +3,3 @@ list-applications:
 
 list-features:
 	@cat playbooks/run.yml | grep -oP "feature_[^ ]+" | sort | uniq
-

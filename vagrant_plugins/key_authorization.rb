@@ -31,4 +31,3 @@ def authorize_key_for_root(config, *key_paths)
     end
   end
 end
-
