@@ -28,7 +28,7 @@ services:
       - traefik.http.middlewares.redirect-non-www-to-www.redirectregex.replacement="https://www.$${1}"
       - traefik.http.routers.traefik.entrypoints=websecure
       - traefik.http.routers.traefik.middlewares=traefik-auth
-      - traefik.http.routers.traefik.rule=Host(`traefik.{{ ansible_nodename }}`)
+      - traefik.http.routers.traefik.rule=Host(`{{ f_traefik__service_fqdn }}`)
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.tls.certresolver=letsencrypt
       - traefik.http.routers.traefik.tls=true
