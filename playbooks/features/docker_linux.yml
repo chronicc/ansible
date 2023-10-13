@@ -25,10 +25,26 @@
     name: "docker-compose=={{ f_docker__compose_version }}"
     state: present
 
-- name: docker // Create docker home
+- name: docker // Create docker directories
   ansible.builtin.file:
-    dest: "{{ f_docker__home }}"
+    dest: "{{ item.path }}"
     state: directory
     owner: root
-    group: docker
-    mode: "0750"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  loop:
+    - path: "{{ f_docker__home }}"
+      group: docker
+      mode: "0750"
+    - path: /etc/docker
+      group: root
+      mode: "0755"
+
+- name: docker // Write docker daemon config
+  ansible.builtin.template:
+    src: templates/config/docker.daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart docker
