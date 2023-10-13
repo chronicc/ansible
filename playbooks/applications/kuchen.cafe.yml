@@ -1,0 +1,63 @@
+---
+- name: kuchen.cafe // Set default flags
+  ansible.builtin.set_fact:
+    _recreate: smart
+
+- name: kuchen.cafe // Create service directory
+  ansible.builtin.file:
+    dest: "{{ f_docker__home }}/kuchen.cafe"
+    state: directory
+    owner: root
+    group: docker
+    mode: "0755"
+
+- name: kuchen.cafe // Create volume directories
+  ansible.builtin.file:
+    dest: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0701"
+  loop:
+    - /var/lib/docker/volumes/kuchencafe_data
+    - /var/lib/docker/volumes/kuchencafe_db
+    - /var/lib/docker/volumes/kuchencafe_plugins
+    - /var/lib/docker/volumes/kuchencafe_themes
+
+- name: kuchen.cafe // Create docker-compose.yml
+  ansible.builtin.template:
+    src: templates/kuchen.cafe-docker-compose.yml.j2
+    dest: "{{ f_docker__home }}/kuchen.cafe/docker-compose.yml"
+    owner: root
+    group: docker
+    mode: "0644"
+
+- name: kuchen.cafe // Download plugins to docker volume
+  ansible.builtin.unarchive:
+    src: "{{ item }}"
+    remote_src: yes
+    dest: /var/lib/docker/volumes/kuchencafe_plugins/_data/
+    owner: 33
+    group: 33
+  loop: "{{ a_kuchen_cafe__plugins | default([]) }}"
+  register: _plugins
+
+- name: kuchen.cafe // Download themes to docker volume
+  ansible.builtin.unarchive:
+    src: "{{ item }}"
+    remote_src: yes
+    dest: /var/lib/docker/volumes/kuchencafe_themes/_data/
+    owner: 33
+    group: 33
+  loop: "{{ a_kuchen_cafe__themes | default([]) }}"
+  register: _themes
+
+- name: kuchen.cafe // Set recreate flag to always
+  ansible.builtin.set_fact:
+    _recreate: always
+  when: _plugins.changed or _themes.changed
+
+- name: kuchen.cafe // Update deployment
+  community.docker.docker_compose:
+    project_src: "{{ f_docker__home }}/kuchen.cafe"
+    recreate: "{{ _recreate }}"
