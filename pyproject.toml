@@ -16,7 +16,7 @@ pywinrm = ">=0.3.0"
 ansible-lint = { version = "^6", markers = "platform_system != 'Windows'" }
 molecule = "^6"
 molecule-docker = "^2"
-pre-commit = "^2"
+pre-commit = "^3"
 
 [build-system]
 requires = ["poetry-core"]
