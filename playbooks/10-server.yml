@@ -54,6 +54,17 @@
 
     # ---( Applications )---
 
+    - name: Import baserow
+      ansible.builtin.import_tasks:
+        file: applications/baserow.yml
+      when:
+        - app_baserow | default(false)
+        - feature_docker | default(false)
+        - feature_traefik | default(false)
+      tags:
+        - application
+        - baserow
+
     - name: Import kimai
       ansible.builtin.import_tasks:
         file: applications/kimai.yml

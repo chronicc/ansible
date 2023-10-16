@@ -1,0 +1,30 @@
+# {{ ansible_managed }}
+---
+version: '3.8'
+
+services:
+  baserow:
+    image: baserow/baserow:{{ a_baserow__image_tag }}
+    labels:
+      - traefik.docker.network=traefik
+      - traefik.enable={{ a_baserow__routing_enabled | default('true') }}
+      - traefik.http.routers.baserow.entrypoints=websecure
+      - traefik.http.routers.baserow.middlewares=sts-headers
+      - traefik.http.routers.baserow.rule=Host(`{{ a_baserow__service_fqdn }}`)
+      - traefik.http.routers.baserow.tls.certresolver=letsencrypt
+      - traefik.http.routers.baserow.tls=true
+    environment:
+      BASEROW_PUBLIC_URL: 'https://{{ a_baserow__service_fqdn }}'
+    volumes:
+      - data:/baserow/data
+    networks:
+      - traefik
+    restart: unless-stopped
+
+volumes:
+  data:
+
+networks:
+  traefik:
+    name: traefik
+    external: true
