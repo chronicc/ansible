@@ -1,5 +1,6 @@
 init_pip_packages:
   - github3.py
+  - passlib
 
 init_python_packages:
   - python3-pip
