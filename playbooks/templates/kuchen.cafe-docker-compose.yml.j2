@@ -9,8 +9,8 @@ services:
       - traefik.docker.network=traefik
       - traefik.enable={{ a_kuchen_cafe__routing_enabled | default('yes') }}
       - traefik.http.routers.kuchen_cafe.entrypoints=websecure
-      - traefik.http.routers.kuchen_cafe.middlewares=sts-headers,redirect-non-www-to-www
-      - traefik.http.routers.kuchen_cafe.rule=Host(`www.{{ a_kuchen_cafe__service_fqdn }}`)
+      - traefik.http.routers.kuchen_cafe.middlewares=sts-headers,redirect-http-to-https,redirect-non-www-to-www
+      - traefik.http.routers.kuchen_cafe.rule=Host(`www.{{ a_kuchen_cafe__service_fqdn }}`) || Host(`{{ a_kuchen_cafe__service_fqdn }}`)
       - traefik.http.routers.kuchen_cafe.tls.certresolver=letsencrypt
       - traefik.http.routers.kuchen_cafe.tls=true
     environment:
