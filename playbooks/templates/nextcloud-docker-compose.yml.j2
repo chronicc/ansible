@@ -23,8 +23,6 @@ services:
   redis:
     image: redis:alpine
     command: redis-server --requirepass {{ a_nextcloud__redis_password }}
-    volumes:
-      - redis:/data
     networks:
       - default
     restart: unless-stopped
@@ -63,7 +61,6 @@ services:
 volumes:
   data:
   database:
-  redis:
 
 networks:
   traefik:
