@@ -21,7 +21,19 @@ Vagrant.configure('2') do |config|
 
   #---( Generic Machines )----------------------------------------------------
 
-  config.vm.define "#{ENV['ANSIBLE_CENTOS_6_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_ALMALINUX_8_HOSTNAME']}", autostart: false do |host|
+    host.vm.box = ENV['ANSIBLE_ALMALINUX_8_BOX_IMAGE']
+    host.vm.network 'private_network', type: 'dhcp'
+    host.vm.hostname = "#{ENV['ANSIBLE_ALMALINUX_8_HOSTNAME']}.vagrant"
+  end
+
+  config.vm.define "#{ENV['ANSIBLE_ALMALINUX_9_HOSTNAME']}", autostart: false do |host|
+    host.vm.box = ENV['ANSIBLE_ALMALINUX_9_BOX_IMAGE']
+    host.vm.network 'private_network', type: 'dhcp'
+    host.vm.hostname = "#{ENV['ANSIBLE_ALMALINUX_9_HOSTNAME']}.vagrant"
+  end
+
+  config.vm.define "#{ENV['ANSIBLE_CENTOS_6_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_CENTOS_6_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_CENTOS_6_HOSTNAME']}.vagrant"
