@@ -2,7 +2,9 @@ require_relative './vagrant_plugins/key_authorization'
 
 Vagrant.configure('2') do |config|
 
-  authorize_key_for_root config, ENV['ANSIBLE_SSH_PUBLIC_KEY_PATH']
+  if config.vm.guest == :linux
+    authorize_key_for_root config, ENV['ANSIBLE_SSH_PUBLIC_KEY_PATH']
+  end
 
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
@@ -95,6 +97,7 @@ Vagrant.configure('2') do |config|
     host.vm.box = ENV['ANSIBLE_WINDOWS_SERVER_2022_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_WINDOWS_SERVER_2022_HOSTNAME']}"
+    host.vm.guest = :windows
   end
 
   #---( Application Specific Machines )---------------------------------------
