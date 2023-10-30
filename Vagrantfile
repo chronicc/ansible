@@ -2,7 +2,9 @@ require_relative './vagrant_plugins/key_authorization'
 
 Vagrant.configure('2') do |config|
 
-  authorize_key_for_root config, ENV['ANSIBLE_SSH_PUBLIC_KEY_PATH']
+  if config.vm.guest == :linux
+    authorize_key_for_root config, ENV['ANSIBLE_SSH_PUBLIC_KEY_PATH']
+  end
 
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
@@ -19,88 +21,101 @@ Vagrant.configure('2') do |config|
 
   #---( Generic Machines )----------------------------------------------------
 
-  config.vm.define "#{ENV['ANSIBLE_CENTOS_6_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_ALMALINUX_8_HOSTNAME']}", autostart: false do |host|
+    host.vm.box = ENV['ANSIBLE_ALMALINUX_8_BOX_IMAGE']
+    host.vm.network 'private_network', type: 'dhcp'
+    host.vm.hostname = "#{ENV['ANSIBLE_ALMALINUX_8_HOSTNAME']}.vagrant"
+  end
+
+  config.vm.define "#{ENV['ANSIBLE_ALMALINUX_9_HOSTNAME']}", autostart: false do |host|
+    host.vm.box = ENV['ANSIBLE_ALMALINUX_9_BOX_IMAGE']
+    host.vm.network 'private_network', type: 'dhcp'
+    host.vm.hostname = "#{ENV['ANSIBLE_ALMALINUX_9_HOSTNAME']}.vagrant"
+  end
+
+  config.vm.define "#{ENV['ANSIBLE_CENTOS_6_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_CENTOS_6_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_CENTOS_6_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_CENTOS_7_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_CENTOS_7_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_CENTOS_7_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_CENTOS_7_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_CENTOS_8_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_CENTOS_8_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_CENTOS_8_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_CENTOS_8_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_DEBIAN_10_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_DEBIAN_10_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_DEBIAN_10_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_DEBIAN_10_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_DEBIAN_11_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_DEBIAN_11_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_DEBIAN_11_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_DEBIAN_11_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_DEBIAN_12_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_DEBIAN_12_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_DEBIAN_12_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_DEBIAN_12_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_FEDORA_36_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_FEDORA_36_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_FEDORA_36_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_FEDORA_36_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_FEDORA_37_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_FEDORA_37_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_FEDORA_37_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_FEDORA_37_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_FEDORA_38_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_FEDORA_38_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_FEDORA_38_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_FEDORA_38_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_UBUNTU_1804_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_UBUNTU_1804_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_UBUNTU_1804_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_UBUNTU_1804_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_UBUNTU_2004_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_UBUNTU_2004_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_UBUNTU_2004_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_UBUNTU_2004_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_UBUNTU_2204_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_UBUNTU_2204_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_UBUNTU_2204_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_UBUNTU_2204_HOSTNAME']}.vagrant"
   end
 
-  config.vm.define "#{ENV['ANSIBLE_WINDOWS_SERVER_2022_HOSTNAME']}" do |host|
+  config.vm.define "#{ENV['ANSIBLE_WINDOWS_SERVER_2022_HOSTNAME']}", autostart: false do |host|
     host.vm.box = ENV['ANSIBLE_WINDOWS_SERVER_2022_BOX_IMAGE']
     host.vm.network 'private_network', type: 'dhcp'
     host.vm.hostname = "#{ENV['ANSIBLE_WINDOWS_SERVER_2022_HOSTNAME']}"
+    host.vm.guest = :windows
   end
 
   #---( Application Specific Machines )---------------------------------------
 
   (1..3).each do |machine_id|
-    config.vm.define "hadoop-#{machine_id}" do |host|
+    config.vm.define "hadoop-#{machine_id}", autostart: false do |host|
       host.vm.box = ENV['ANSIBLE_HADOOP_BOX_IMAGE']
       host.vm.network 'private_network', type: 'dhcp'
       host.vm.hostname = "hadoop-#{machine_id}.vagrant"
