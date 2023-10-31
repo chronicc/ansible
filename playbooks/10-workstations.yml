@@ -23,6 +23,8 @@
   roles:
     - role: common
       tags: common
+    - role: chronicc.bash
+      tags: bash
     - role: geerlingguy.docker
       tags: docker
     - role: ctorgalson.nerdfonts
