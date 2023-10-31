@@ -24,7 +24,7 @@
     - role: init
       tags: always
     - role: common
-      tags: always
+      tags: common
     - role: geerlingguy.docker
       tags: docker
     - role: ctorgalson.nerdfonts
