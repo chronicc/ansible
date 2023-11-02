@@ -1,0 +1,15 @@
+---
+- name: Install packages.
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+  loop: '{{ sshd_packages }}'
+
+- name: Create sshd config.
+  ansible.builtin.template:
+    src: 'sshd_config.j2'
+    dest: '{{ sshd_config_dir }}/{{ sshd_config_file }}'
+    owner: root
+    group: root
+    mode: '0644'
+  notify: reload sshd

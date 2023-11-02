@@ -1,0 +1,5 @@
+sshd_packages:
+  - openssh-server
+  - openssh-sftp-server
+
+sshd_config_dir: /etc/ssh
