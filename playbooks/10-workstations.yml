@@ -15,8 +15,11 @@
     - name: Include OS-specific variables
       ansible.builtin.include_vars: '{{ item }}'
       with_first_found:
-        - '{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml'
-        - '{{ ansible_distribution }}.yml'
+        - files:
+            - '{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml'
+            - '{{ ansible_distribution }}.yml'
+          paths:
+            - ../vars
       tags:
         - always
 
