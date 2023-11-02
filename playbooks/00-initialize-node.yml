@@ -1,5 +1,5 @@
 ---
-- name: Base installation playbook
+- name: Initialize a node.
   hosts: all
   become: yes
   serial: 10
@@ -24,10 +24,3 @@
       tags: always
     - role: common
       tags: always
-
-  tasks:
-    - name: Include host git packages
-      ansible.builtin.include_tasks: features/host_git_packages.yml
-      loop: '{{ h_git_packages | default([]) }}'
-      tags:
-        - host

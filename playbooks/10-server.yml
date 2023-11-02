@@ -32,6 +32,14 @@
       tags:
         - docker
 
+    - name: Include host git packages (Linux)
+      ansible.builtin.include_tasks: features/host_git_packages.yml
+      loop: '{{ h_git_packages | default([]) }}'
+      when:
+        - ansible_system == 'Linux'
+      tags:
+        - host
+
     - name: Import nginx (Linux)
       ansible.builtin.import_tasks:
         file: features/nginx.yml
