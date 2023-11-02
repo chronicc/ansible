@@ -24,6 +24,8 @@
 
   roles:
     - role: init
-      tags: always
+      tags: init
     - role: common
-      tags: always
+      tags: common
+    - role: sshd
+      tags: sshd

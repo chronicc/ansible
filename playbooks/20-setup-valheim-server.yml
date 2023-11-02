@@ -12,6 +12,8 @@
             - '{{ ansible_distribution }}.yml'
           paths:
             - ../vars
+      tags:
+        always
 
   tasks:
     - name: Import docker (Linux)
