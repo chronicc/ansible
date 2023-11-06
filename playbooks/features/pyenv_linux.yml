@@ -1,0 +1,10 @@
+---
+- name: pyenv // Determine the pyenv path.
+  ansible.builtin.set_fact:
+    pyenv_path: "/home/{{ user }}/.pyenv"
+
+- name: pyenv // Install pyenv.
+  ansible.builtin.git:
+    repo: https://github.com/pyenv/pyenv.git
+    dest: "{{ pyenv_path }}"
+    version: "{{ pyenv_version }}"

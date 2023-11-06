@@ -51,3 +51,11 @@
         - feature_flutter | default(false)
       tags:
         - flutter
+
+    - name: Import pyenv tasks
+      ansible.builtin.import_tasks:
+        file: features/pyenv_linux.yml
+      when:
+        - feature_pyenv | default(false)
+      tags:
+        - pyenv
