@@ -1,6 +1,6 @@
 .cache
 .docker
-.envrc.local
+.rtx.local.toml
 .vagrant
 .venv
 .vscode

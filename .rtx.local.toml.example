@@ -1,10 +1,11 @@
 
+[env]
 # Path to your ssh public key. This key will be copied to the virtual machine
 # to enable passwordless login.
-export ANSIBLE_SSH_PUBLIC_KEY_PATH=
+ANSIBLE_SSH_PUBLIC_KEY_PATH=""
 
 # Amount of cpus used per virtual machine.
-export ANSIBLE_VM_CPUS=4
+ANSIBLE_VM_CPUS="4"
 
 # Amount of memory used per virtual machine (in MB).
-export ANSIBLE_VM_MEMORY=4096
+ANSIBLE_VM_MEMORY="4096"
