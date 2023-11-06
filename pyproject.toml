@@ -9,7 +9,7 @@ readme = "README.md"
 ansible = "^8"
 ansible-core = "^2"
 docker = "^6"
-python = ">=3.10"
+python = "^3.12"
 pywinrm = ">=0.3.0"
 
 [tool.poetry.dev-dependencies]
