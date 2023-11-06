@@ -1,0 +1,28 @@
+---
+- name: Install fonts
+  hosts: all
+  become: yes
+  serial: 10
+
+  pre_tasks:
+    - name: Fail when not running on linux
+      ansible.builtin.fail:
+        msg: 'This playbook is only intended to run on linux'
+      when: ansible_system != 'Linux'
+      tags:
+        - always
+
+    - name: Include OS-specific variables
+      ansible.builtin.include_vars: '{{ item }}'
+      with_first_found:
+        - files:
+            - '{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml'
+            - '{{ ansible_distribution }}.yml'
+          paths:
+            - ../vars
+      tags:
+        - always
+
+  roles:
+    - role: ctorgalson.nerdfonts
+      tags: fonts

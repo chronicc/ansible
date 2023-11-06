@@ -32,8 +32,6 @@
       tags: bash
     - role: geerlingguy.docker
       tags: docker
-    - role: ctorgalson.nerdfonts
-      tags: fonts
 
   tasks:
     - name: Import android studio tasks
