@@ -53,6 +53,16 @@
         - application
         - nginx
 
+    - name: Import node-exporter role (Linux)
+      ansible.builtin.import_role:
+        name: prometheus.prometheus.node_exporter
+      when:
+        - ansible_system == 'Linux'
+        - feature_node_exporter | default(false)
+      tags:
+        - application
+        - node-exporter
+
     - name: Import traefik (Linux)
       ansible.builtin.import_tasks:
         file: features/traefik.yml
