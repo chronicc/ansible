@@ -34,6 +34,14 @@
       tags: docker
 
   tasks:
+    - name: Include host git packages (Linux)
+      ansible.builtin.include_tasks: features/host_git_packages.yml
+      loop: '{{ h_git_packages | default([]) }}'
+      when:
+        - ansible_system == 'Linux'
+      tags:
+        - host
+
     - name: Import android studio tasks
       ansible.builtin.import_tasks:
         file: features/android_studio_linux.yml
