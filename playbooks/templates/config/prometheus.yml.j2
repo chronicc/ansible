@@ -71,3 +71,4 @@ scrape_configs:
     static_configs:
       - targets:
           - 127.0.0.1:9090
+  {{ a_loki__prometheus_additional_scrape_configs | default([]) | to_yaml | indent(2) }}
