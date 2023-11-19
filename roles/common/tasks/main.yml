@@ -1,17 +1,20 @@
 ---
-- name: Include OS-specific variables.
+- name: Include OS-specific variables
   ansible.builtin.include_vars: '{{ lookup("ansible.builtin.first_found", params) }}'
   vars:
     params:
       files:
-        - '{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml'
-        - '{{ ansible_distribution }}.yml'
-        - '{{ ansible_os_family }}.yml'
-        - main.yaml
+        - '{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml'
+        - '{{ ansible_distribution | lower }}.yml'
       paths:
-        - '../vars'
+        - ../vars
 
-- name: Import OS-specific tasks.
-  ansible.builtin.import_tasks:
-    file: 'Linux.yml'
-  when: ansible_system == 'Linux'
+- name: Include OS-specific tasks
+  ansible.builtin.include_tasks: '{{ lookup("ansible.builtin.first_found", params) }}'
+  vars:
+    params:
+      files:
+        - '{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml'
+        - '{{ ansible_distribution | lower }}.yml'
+      paths:
+        - .
