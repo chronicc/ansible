@@ -3,10 +3,25 @@
   ansible.builtin.hostname:
     name: '{{ inventory_hostname }}'
 
-- name: Set domainname
-  ansible.builtin.cmd:
-    cmd: '{{ common_domain_binary }} {{ inventory_domain }}'
-  when: inventory_domainname is defined
+- name: Configure domainname
+  when: inventory_domain is defined
+  block:
+    - name: Collect domainname
+      ansible.builtin.command: '{{ common_domainname_binary }}'
+      changed_when: false
+      register: _domainname
+
+    - name: Add fqdn to hosts file
+      ansible.builtin.lineinfile:
+        path: '{{ common_hosts_file }}'
+        line: '127.0.1.1 {{ inventory_hostname }}.{{ inventory_domain }} {{ inventory_hostname }}'
+        regexp: '^127\.0\.1\.1\s+(?!localhost).*'
+        insertafter: '^127.0.1.1'
+
+    - name: Set domainname
+      ansible.builtin.command: '{{ common_domainname_binary }} {{ inventory_domain }}'
+      changed_when: true
+      when: _domainname.stdout != inventory_domain
 
 - name: Ensure blacklisted packages are uninstalled
   ansible.builtin.package:
