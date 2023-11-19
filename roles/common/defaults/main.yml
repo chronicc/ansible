@@ -1,3 +1,4 @@
+common_blacklisted_packages: []
 common_group_packages: []
 common_host_packages: []
 common_packages:

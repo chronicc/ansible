@@ -3,6 +3,12 @@
   ansible.builtin.hostname:
     name: '{{ inventory_hostname }}'
 
+- name: Ensure blacklisted packages are uninstalled
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: absent
+  loop: '{{ common_blacklisted_packages }}'
+
 - name: Ensure global packages are installed
   ansible.builtin.package:
     name: '{{ item }}'
