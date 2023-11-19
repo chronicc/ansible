@@ -20,14 +20,6 @@ jobs:
         run: |
           mkdir -p ~/.ansible
 
-      # - name: Cache poetry dependencies
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.cache/pypoetry/virtualenvs
-      #     key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-
-      # - uses: Gr1N/setup-poetry@v8
-
       - name: Cache ansible roles
         uses: actions/cache@v3
         with:
