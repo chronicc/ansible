@@ -1,5 +1,3 @@
 init_ansible_cache_path: /var/cache/ansible
-
 init_pip_packages: []
-
 init_python_packages: []
