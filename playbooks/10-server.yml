@@ -1,7 +1,7 @@
 ---
 - name: Configure all servers.
   hosts: servers
-  become: yes
+  become: true
   serial: 10
   pre_tasks:
     - name: Include OS-specific variables
@@ -203,7 +203,7 @@
     - name: Restart loki
       community.docker.docker_compose:
         project_src: '{{ f_docker__home }}/loki'
-        restarted: yes
+        restarted: true
       tags:
         - application
         - loki

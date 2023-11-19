@@ -11,18 +11,16 @@
     mode: '0755'
 
 - name: Update Package Cache (apt).
-  tags: always
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
   changed_when: false
   when:
     - ansible_pkg_mgr == 'apt'
     - not __init_complete.stat.exists
 
 - name: Update Package Cache (yum).
-  tags: always
   ansible.builtin.yum:
-    update_cache: yes
+    update_cache: true
   changed_when: false
   when:
     - ansible_pkg_mgr == 'yum'

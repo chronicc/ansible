@@ -11,4 +11,4 @@ sshd_options:
 
 sshd_config_file: sshd_config
 
-sshd_enable: yes
+sshd_enable: true

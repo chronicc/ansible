@@ -35,7 +35,7 @@
 - name: kuchen.cafe // Download plugins to docker volume
   ansible.builtin.unarchive:
     src: "{{ item }}"
-    remote_src: yes
+    remote_src: true
     dest: /var/lib/docker/volumes/kuchencafe_plugins/_data/
     owner: 33
     group: 33
@@ -45,7 +45,7 @@
 - name: kuchen.cafe // Download themes to docker volume
   ansible.builtin.unarchive:
     src: "{{ item }}"
-    remote_src: yes
+    remote_src: true
     dest: /var/lib/docker/volumes/kuchencafe_themes/_data/
     owner: 33
     group: 33

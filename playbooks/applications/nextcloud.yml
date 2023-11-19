@@ -21,7 +21,7 @@
     job: "/usr/bin/docker exec -i -u www-data nextcloud_app_1 php -f /var/www/html/cron.php"
     minute: "*/5"
     user: root
-    backup: yes
+    backup: true
 
 - name: nextcloud // Update deployment
   community.docker.docker_compose:
@@ -31,5 +31,5 @@
 - name: nextcloud // Update deployment (forced)
   community.docker.docker_compose:
     project_src: "{{ f_docker__home }}/nextcloud"
-    pull: yes
+    pull: true
   when: force_update | default(false)

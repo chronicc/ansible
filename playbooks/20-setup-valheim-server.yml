@@ -1,7 +1,7 @@
 ---
 - name: Setup a Valheim server.
   hosts: all
-  become: yes
+  become: true
   serial: 10
   pre_tasks:
     - name: Include OS-specific variables.
