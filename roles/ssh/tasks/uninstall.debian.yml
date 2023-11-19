@@ -1,0 +1,8 @@
+---
+- name: Ensure packages are uninstalled
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: absent
+    autoremove: true
+    purge: true
+  loop: '{{ ssh_packages }}'

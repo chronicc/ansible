@@ -1,0 +1,9 @@
+---
+- name: Ensure packages are installed
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: present
+    install_recommends: false
+    update_cache: true
+    cache_valid_time: '{{ apt_cache_valid_time | default("3600") }}'
+  loop: '{{ ssh_packages }}'

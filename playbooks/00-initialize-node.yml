@@ -27,5 +27,5 @@
       tags: init
     - role: common
       tags: common
-    - role: sshd
-      tags: sshd
+    - role: ssh
+      tags: ssh
