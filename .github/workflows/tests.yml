@@ -12,6 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         target:
+          - role: init
+            scenario: default
           - role: ssh
             scenario: default
           - role: ssh
