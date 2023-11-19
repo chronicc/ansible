@@ -33,16 +33,22 @@
   ansible.builtin.package:
     name: '{{ item }}'
     state: present
+    update_cache: true
+    cache_valid_time: '{{ apt_cache_valid_time | default("3600") }}'
   loop: '{{ common_packages }}'
 
 - name: Ensure group specific packages are installed
   ansible.builtin.package:
     name: '{{ item }}'
     state: present
+    update_cache: true
+    cache_valid_time: '{{ apt_cache_valid_time | default("3600") }}'
   loop: '{{ common_group_packages }}'
 
 - name: Ensure host specific packages are installed
   ansible.builtin.package:
     name: '{{ item }}'
     state: present
+    update_cache: true
+    cache_valid_time: '{{ apt_cache_valid_time | default("3600") }}'
   loop: '{{ common_host_packages }}'
