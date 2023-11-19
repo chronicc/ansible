@@ -1,6 +1,6 @@
 # Ansible
 
-![pre-commit](https://github.com/chronicc/ansible/actions/workflows/pre-commit.yml/badge.svg?branch=main)
+![tests](https://github.com/chronicc/ansible/actions/workflows/tests.yml/badge.svg?branch=main)
 
 A collection of ansible playbooks for managing my infrastructure and testing concepts.
 
