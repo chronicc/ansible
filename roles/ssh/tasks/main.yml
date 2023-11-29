@@ -1,0 +1,24 @@
+---
+- name: Set role target to install
+  ansible.builtin.set_fact:
+    _target: install
+  when: ssh_enable | bool
+
+- name: Set role target to uninstall
+  ansible.builtin.set_fact:
+    _target: uninstall
+  when: not ssh_enable | bool
+
+- name: Include OS-specific variables
+  ansible.builtin.include_vars: '{{ lookup("ansible.builtin.first_found", params) }}'
+  vars:
+    params:
+      files:
+        - '{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml'
+        - '{{ ansible_distribution | lower }}.yml'
+        - main.yaml
+      paths:
+        - ../vars
+
+- name: Include target tasks
+  ansible.builtin.include_tasks: '{{ _target }}.yml'

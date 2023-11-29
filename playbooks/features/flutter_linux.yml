@@ -20,7 +20,7 @@
   ansible.builtin.unarchive:
     creates: "{{ custom_app_path }}/bin/flutter"
     dest: "{{ custom_app_path }}"
-    remote_src: yes
+    remote_src: true
     src: "/var/cache/ansible/flutter_{{ f_flutter__version }}.{{ flutter_archive_format }}"
   when: not __flutter_bin.stat.exists
 

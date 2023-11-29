@@ -1,0 +1,31 @@
+---
+- name: Populate service facts
+  ansible.builtin.service_facts:
+
+- name: Ensure the ssh server is disabled and stopped
+  ansible.builtin.service:
+    name: '{{ ssh_service }}'
+    state: stopped
+    enabled: false
+  when:
+    - ansible_facts.services[ssh_service] is defined
+
+- name: Include OS-specific tasks
+  ansible.builtin.include_tasks: '{{ lookup("ansible.builtin.first_found", params) }}'
+  vars:
+    params:
+      files:
+        - '{{ _target }}.{{ ansible_distribution | lower }}.yml'
+        - '{{ _target }}.{{ ansible_os_family | lower }}.yml'
+      paths:
+        - .
+
+- name: Ensure the ssh directory for root is absent
+  ansible.builtin.file:
+    path: '{{ ssh_root_dir }}'
+    state: absent
+
+- name: Ensure the ssh config directory is absent
+  ansible.builtin.file:
+    path: '{{ ssh_config_dir }}'
+    state: absent

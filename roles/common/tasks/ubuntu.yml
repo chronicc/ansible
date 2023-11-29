@@ -1,0 +1,54 @@
+---
+- name: Set hostname
+  ansible.builtin.hostname:
+    name: '{{ inventory_hostname }}'
+
+- name: Configure domainname
+  when: inventory_domain is defined
+  block:
+    - name: Collect domainname
+      ansible.builtin.command: '{{ common_domainname_binary }}'
+      changed_when: false
+      register: _domainname
+
+    - name: Add fqdn to hosts file
+      ansible.builtin.lineinfile:
+        path: '{{ common_hosts_file }}'
+        line: '127.0.1.1 {{ inventory_hostname }}.{{ inventory_domain }} {{ inventory_hostname }}'
+        regexp: '^127\.0\.1\.1\s+(?!localhost).*'
+        insertafter: '^127.0.1.1'
+
+    - name: Set domainname
+      ansible.builtin.command: '{{ common_domainname_binary }} {{ inventory_domain }}'
+      changed_when: true
+      when: _domainname.stdout != inventory_domain
+
+- name: Ensure blacklisted packages are uninstalled
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: absent
+  loop: '{{ common_blacklisted_packages }}'
+
+- name: Ensure global packages are installed
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+    update_cache: true
+    cache_valid_time: '{{ apt_cache_valid_time | default("3600") }}'
+  loop: '{{ common_packages }}'
+
+- name: Ensure group specific packages are installed
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+    update_cache: true
+    cache_valid_time: '{{ apt_cache_valid_time | default("3600") }}'
+  loop: '{{ common_group_packages }}'
+
+- name: Ensure host specific packages are installed
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+    update_cache: true
+    cache_valid_time: '{{ apt_cache_valid_time | default("3600") }}'
+  loop: '{{ common_host_packages }}'

@@ -1,4 +1,4 @@
-name: pre-commit
+name: tests
 
 on:
   pull_request:
@@ -6,6 +6,29 @@ on:
     branches: [main]
 
 jobs:
+  molecule:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - role: init
+            scenario: default
+          - role: common
+            scenario: default
+          - role: ssh
+            scenario: default
+          - role: ssh
+            scenario: install
+          - role: ssh
+            scenario: uninstall
+    steps:
+      - uses: actions/checkout@v3
+      - uses: gofrolist/molecule-action@v2
+        with:
+          molecule_args: --scenario-name ${{ matrix.target.scenario }}
+          molecule_working_dir: roles/${{ matrix.target.role }}
+
   pre-commit:
     runs-on: ubuntu-latest
     steps:
@@ -19,14 +42,6 @@ jobs:
       - name: Create ansible home directory
         run: |
           mkdir -p ~/.ansible
-
-      # - name: Cache poetry dependencies
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.cache/pypoetry/virtualenvs
-      #     key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-
-      # - uses: Gr1N/setup-poetry@v8
 
       - name: Cache ansible roles
         uses: actions/cache@v3

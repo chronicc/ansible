@@ -1,0 +1,8 @@
+# {{ ansible_managed }}
+
+# This is the ssh server system-wide configuration file.
+# See ssh_config(5) for more information.
+
+{% for option in ssh_options | dict2items %}
+{{ option.key }} {{ option.value }}
+{% endfor %}

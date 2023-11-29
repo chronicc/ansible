@@ -1,0 +1,17 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+
+    - name: Run install target of role
+      ansible.builtin.include_role:
+        name: ssh
+
+    - name: Flush handlers
+      ansible.builtin.meta: flush_handlers
+
+    - name: Run uninstall target of role
+      ansible.builtin.include_role:
+        name: ssh
+      vars:
+        ssh_enable: false

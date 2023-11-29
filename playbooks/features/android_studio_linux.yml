@@ -15,7 +15,7 @@
   ansible.builtin.unarchive:
     creates: "{{ custom_app_path }}/bin/android_studio"
     dest: "{{ custom_app_path }}"
-    remote_src: yes
+    remote_src: true
     src: "/var/cache/ansible/android_studio_{{ f_android_studio__version }}.{{ android_studio_archive_format }}"
   when: not __android_studio_bin.stat.exists
 

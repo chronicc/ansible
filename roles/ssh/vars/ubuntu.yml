@@ -1,0 +1,8 @@
+ssh_config_dir: /etc/ssh
+ssh_root_dir: /root/.ssh
+ssh_packages:
+  - openssh-client
+  - openssh-server
+  - openssh-sftp-server
+
+ssh_service: ssh

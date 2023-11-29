@@ -1,11 +1,9 @@
+require 'yaml'
 require_relative './vagrant_plugins/key_authorization'
 
+input = YAML.load_file('vagrant.yml')
+
 Vagrant.configure('2') do |config|
-
-  if config.vm.guest == :linux
-    authorize_key_for_root config, ENV['ANSIBLE_SSH_PUBLIC_KEY_PATH']
-  end
-
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = true
@@ -15,123 +13,33 @@ Vagrant.configure('2') do |config|
     'vagrant-hostmanager',
     'vagrant-libvirt',
   ]
-  config.vm.provider "libvirt"
   config.winrm.max_tries = 300
   config.winrm.retry_delay = 2
 
-  #---( Generic Machines )----------------------------------------------------
+  #---( Machines )------------------------------------------------------------
 
-  config.vm.define "#{ENV['ANSIBLE_ALMALINUX_8_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_ALMALINUX_8_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_ALMALINUX_8_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_ALMALINUX_9_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_ALMALINUX_9_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_ALMALINUX_9_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_CENTOS_6_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_CENTOS_6_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_CENTOS_6_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_CENTOS_7_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_CENTOS_7_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_CENTOS_7_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_CENTOS_8_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_CENTOS_8_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_CENTOS_8_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_DEBIAN_10_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_DEBIAN_10_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_DEBIAN_10_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_DEBIAN_11_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_DEBIAN_11_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_DEBIAN_11_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_DEBIAN_12_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_DEBIAN_12_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_DEBIAN_12_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_FEDORA_36_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_FEDORA_36_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_FEDORA_36_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_FEDORA_37_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_FEDORA_37_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_FEDORA_37_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_FEDORA_38_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_FEDORA_38_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_FEDORA_38_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_UBUNTU_1804_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_UBUNTU_1804_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_UBUNTU_1804_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_UBUNTU_2004_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_UBUNTU_2004_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_UBUNTU_2004_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_UBUNTU_2204_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_UBUNTU_2204_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_UBUNTU_2204_HOSTNAME']}.vagrant"
-  end
-
-  config.vm.define "#{ENV['ANSIBLE_WINDOWS_SERVER_2022_HOSTNAME']}", autostart: false do |host|
-    host.vm.box = ENV['ANSIBLE_WINDOWS_SERVER_2022_BOX_IMAGE']
-    host.vm.network 'private_network', type: 'dhcp'
-    host.vm.hostname = "#{ENV['ANSIBLE_WINDOWS_SERVER_2022_HOSTNAME']}"
-    host.vm.guest = :windows
-  end
-
-  #---( Application Specific Machines )---------------------------------------
-
-  (1..3).each do |machine_id|
-    config.vm.define "hadoop-#{machine_id}", autostart: false do |host|
-      host.vm.box = ENV['ANSIBLE_HADOOP_BOX_IMAGE']
-      host.vm.network 'private_network', type: 'dhcp'
-      host.vm.hostname = "hadoop-#{machine_id}.vagrant"
+  input['nodes'].each do |node|
+    config.vm.define "#{node['name']}", autostart: false do |n|
+      n.vm.box = node['box']
+      if node['version']
+        n.vm.box_version = node['version']
+      end
+      n.vm.network 'private_network', type: 'dhcp'
+      n.vm.hostname = node['name']
+      if node['guest'] == 'linux'
+        authorize_key_for_root n, ENV['ANSIBLE_SSH_PUBLIC_KEY_PATH']
+      end
+      if node['guest'] == 'windows'
+        n.vm.guest = :windows
+      end
     end
   end
 
-  #---( Resource Setup )------------------------------------------------------
+  #---( Provider )------------------------------------------------------------
 
-  config.vm.provider :libvirt do |vm|
-    vm.cpus = ENV['ANSIBLE_VM_CPUS']
-    vm.memory = ENV['ANSIBLE_VM_MEMORY']
+  config.vm.provider 'libvirt' do |libvirt|
+    libvirt.id_ssh_key_file = ENV['ANSIBLE_SSH_PRIVATE_KEY_PATH']
+    libvirt.cpus = ENV['ANSIBLE_VM_CPUS']
+    libvirt.memory = ENV['ANSIBLE_VM_MEMORY']
   end
-
-  config.vm.provider :virtualbox do |vm|
-    vm.customize ["modifyvm", :id, "--memory", ENV['ANSIBLE_VM_MEMORY']]
-    vm.customize ["modifyvm", :id, "--cpus", ENV['ANSIBLE_VM_CPUS']]
-  end
-
 end

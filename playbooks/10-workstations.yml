@@ -1,7 +1,7 @@
 ---
 - name: Configure linux workstations
   hosts: workstations
-  become: yes
+  become: true
   serial: 10
 
   pre_tasks:
