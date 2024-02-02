@@ -1,0 +1,47 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    codename: "{{ ansible_lsb.codename }}"
+    dist: "{{ ansible_distribution | lower }}"
+    pkg_blacklisted_packages:
+      - nano
+    pkg_packages:
+      - curl
+    pkg_group_packages:
+      - git
+    pkg_host_packages:
+      - vim
+    pkg_sources:
+      - name: docker
+        key: https://download.docker.com/linux/{{ dist }}/gpg
+        repo: deb https://download.docker.com/linux/{{ dist }} {{ codename }} stable
+
+  pre_tasks:
+    - name: Check if test system is already initialized
+      ansible.builtin.stat:
+        path: /initialized
+      register: _initialized
+
+    - name: Initialize test system if not already initialized
+      when: not _initialized.stat.exists
+      block:
+        - name: Ensure an unconfigured source and an blacklisted package is present
+          ansible.builtin.include_role:
+            name: pkg
+          vars:
+            pkg_packages:
+              - nano
+            pkg_sources:
+              - name: deletme
+                key: https://download.docker.com/linux/{{ dist }}/gpg
+                repo: deb https://download.docker.com/linux/{{ dist }} {{ codename }} stable
+
+        - name: Mark test system as initialized
+          ansible.builtin.file:
+            path: /initialized
+            state: touch
+            mode: '0644'
+
+  roles:
+    - role: pkg

@@ -1,0 +1,80 @@
+---
+- name: Ensure default packages are installed
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    cache_valid_time: '{{ pkg_cache_timeout }}'
+    install_recommends: '{{ pkg_install_recommendations }}'
+    state: present
+    update_cache: true
+  loop: '{{ pkg_default_packages }}'
+
+- name: Collect list of present sources
+  ansible.builtin.find:
+    file_type: file
+    paths: '{{ pkg_sources_dir }}'
+    patterns: '*.list'
+    recurse: false
+  register: _collected_sources
+
+- name: Isolate source names from collected sources
+  ansible.builtin.set_fact:
+    _collected_sources: |
+      {{
+        _collected_sources.files
+        | map(attribute="path")
+        | map("basename")
+        | map("splitext")
+        | map("first")
+      }}
+
+- name: Collect list of configured sources
+  ansible.builtin.set_fact:
+    _configured_sources: '{{ pkg_sources | map(attribute="name") }}'
+
+- name: Remove configured sources from collected sources
+  ansible.builtin.set_fact:
+    _collected_sources: '{{ _collected_sources | difference(_configured_sources) }}'
+
+- name: Ensure the keys for unconfigured sources are absent
+  ansible.builtin.file:
+    path: '{{ pkg_keys_dir }}/{{ item }}.asc'
+    state: absent
+  loop: '{{ _collected_sources }}'
+
+- name: Ensure unconfigured sources are absent
+  ansible.builtin.file:
+    path: '{{ pkg_sources_dir }}/{{ item }}.list'
+    state: absent
+  loop: '{{ _collected_sources }}'
+
+- name: Ensure the keys for configured sources are present
+  ansible.builtin.get_url:
+    url: '{{ item.key }}'
+    dest: '{{ pkg_keys_dir }}/{{ item.name }}.asc'
+    mode: '0644'
+  loop: '{{ pkg_sources }}'
+
+- name: Ensure configured sources are present
+  ansible.builtin.apt_repository:
+    repo: '{{ item.repo }}'
+    filename: '{{ item.name }}'
+    state: present
+  loop: '{{ pkg_sources }}'
+
+- name: Ensure blacklisted packages are uninstalled
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: absent
+  loop: '{{ pkg_blacklisted_packages }}'
+
+- name: Merge global, group specific and host specific packages
+  ansible.builtin.set_fact:
+    _packages: '{{ pkg_packages + pkg_group_packages + pkg_host_packages }}'
+
+- name: Ensure configured packages are installed
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: present
+    update_cache: true
+    cache_valid_time: '{{ pkg_cache_timeout }}'
+  loop: '{{ _packages }}'

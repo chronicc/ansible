@@ -12,9 +12,11 @@ jobs:
       fail-fast: false
       matrix:
         target:
+          - role: common
+            scenario: default
           - role: init
             scenario: default
-          - role: common
+          - role: pkg
             scenario: default
           - role: ssh
             scenario: default
