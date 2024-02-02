@@ -24,14 +24,11 @@
         - always
 
   roles:
-    - role: common
-      tags: common
-    - role: cimon-io.asdf
-      tags: asdf
-    - role: chronicc.bash
-      tags: bash
-    - role: geerlingguy.docker
-      tags: docker
+    - { role: common, tags: common }
+    - { role: pkg, tags: pkg }
+    - { role: cimon-io.asdf, tags: asdf }
+    - { role: chronicc.bash, tags: bash }
+    - { role: geerlingguy.docker, tags: docker }
 
   tasks:
     - name: Include host git packages (Linux)

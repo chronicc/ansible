@@ -22,33 +22,3 @@
       ansible.builtin.command: '{{ common_domainname_binary }} {{ inventory_domain }}'
       changed_when: true
       when: _domainname.stdout != inventory_domain
-
-- name: Ensure blacklisted packages are uninstalled
-  ansible.builtin.package:
-    name: '{{ item }}'
-    state: absent
-  loop: '{{ common_blacklisted_packages }}'
-
-- name: Ensure global packages are installed
-  ansible.builtin.package:
-    name: '{{ item }}'
-    state: present
-    update_cache: true
-    cache_valid_time: '{{ apt_cache_valid_time | default("3600") }}'
-  loop: '{{ common_packages }}'
-
-- name: Ensure group specific packages are installed
-  ansible.builtin.package:
-    name: '{{ item }}'
-    state: present
-    update_cache: true
-    cache_valid_time: '{{ apt_cache_valid_time | default("3600") }}'
-  loop: '{{ common_group_packages }}'
-
-- name: Ensure host specific packages are installed
-  ansible.builtin.package:
-    name: '{{ item }}'
-    state: present
-    update_cache: true
-    cache_valid_time: '{{ apt_cache_valid_time | default("3600") }}'
-  loop: '{{ common_host_packages }}'

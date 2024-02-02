@@ -1,0 +1,20 @@
+---
+- name: Include OS-specific variables
+  ansible.builtin.include_vars: '{{ lookup("ansible.builtin.first_found", params) }}'
+  vars:
+    params:
+      files:
+        - '{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml'
+        - '{{ ansible_distribution | lower }}.yml'
+      paths:
+        - ../vars
+
+- name: Include OS-specific tasks
+  ansible.builtin.include_tasks: '{{ lookup("ansible.builtin.first_found", params) }}'
+  vars:
+    params:
+      files:
+        - '{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml'
+        - '{{ ansible_distribution | lower }}.yml'
+      paths:
+        - .

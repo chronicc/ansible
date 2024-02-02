@@ -1,0 +1,20 @@
+---
+pkg_package_names:
+  bash: bash
+  bash-completion: bash-completion
+  curl: curl
+  git: git
+  htop: htop
+  iotop: iotop
+  make: make
+  mlocate: mlocate
+  tig: tig
+  unzip: unzip
+  vim: vim
+  zip: zip
+
+pkg_default_packages:
+  - apt-transport-https
+
+pkg_keys_dir: /etc/apt/trusted.gpg.d
+pkg_sources_dir: /etc/apt/sources.list.d
