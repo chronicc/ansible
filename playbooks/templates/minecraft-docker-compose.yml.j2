@@ -1,0 +1,24 @@
+# {{ ansible_managed }}
+---
+version: '3.8'
+
+services:
+  minecraft-server:
+    image: itzg/minecraft-server:{{ a_minecraft__image_tag | default('latest') }}
+    container_name: minecraft-server
+    volumes:
+      - data:/data
+    environment:
+      - DIFFICULTY={{ a_minecraft__difficulty | default('normal') }}
+      - EULA=TRUE
+      - GAMEMODE={{ a_minecraft__gamemode | default('survival') }}
+      - OPS={{ a_minecraft__ops | default('') }}
+      - SERVER_NAME={{ a_minecraft__server_name | default('Minecraft Server') }}
+    networks:
+      - default
+    ports:
+      - 25565:25565/udp
+    restart: always
+
+volumes:
+  data:

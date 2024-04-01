@@ -174,6 +174,16 @@
         - application
         - teamspeak-server
 
+    - name: Import minecraft-server
+      ansible.builtin.import_tasks:
+        file: applications/minecraft-server.yml
+      when:
+        - app_minecraft | default(false)
+        - feature_docker | default(false)
+      tags:
+        - application
+        - valheim
+
     - name: Import valheim-server
       ansible.builtin.import_tasks:
         file: applications/valheim-server.yml
