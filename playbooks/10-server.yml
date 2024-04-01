@@ -174,9 +174,9 @@
         - application
         - teamspeak-server
 
-    - name: Import valheim
+    - name: Import valheim-server
       ansible.builtin.import_tasks:
-        file: applications/valheim.yml
+        file: applications/valheim-server.yml
       when:
         - app_valheim | default(false)
         - feature_docker | default(false)

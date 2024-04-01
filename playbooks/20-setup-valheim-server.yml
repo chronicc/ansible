@@ -26,7 +26,7 @@
 
     - name: Import valheim tasks.
       ansible.builtin.import_tasks:
-        file: applications/valheim.yml
+        file: applications/valheim-server.yml
       when:
         - ansible_system == 'Linux'
       tags:
