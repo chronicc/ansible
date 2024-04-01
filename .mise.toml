@@ -1,0 +1,14 @@
+[env]
+'_'.python.venv.create = true
+'_'.python.venv.path = ".venv"
+
+# Vagrant
+VAGRANT_CHECKPOINT_DISABLE="true"
+VAGRANT_INSTALL_LOCAL_PLUGINS="true"
+
+[tools]
+minikube = "1.31.2"
+python = "3.12"
+
+[settings]
+experimental = true
