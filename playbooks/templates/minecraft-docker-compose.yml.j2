@@ -1,7 +1,5 @@
 # {{ ansible_managed }}
 ---
-version: '3.8'
-
 services:
   minecraft-server:
     image: itzg/minecraft-server:{{ a_minecraft__image_tag | default('latest') }}

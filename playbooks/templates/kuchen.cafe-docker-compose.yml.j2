@@ -1,7 +1,5 @@
 # {{ ansible_managed }}
 ---
-version: '3.8'
-
 services:
   wordpress:
     image: wordpress:{{ a_kuchen_cafe__image_tag | default('latest') }}

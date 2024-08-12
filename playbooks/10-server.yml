@@ -35,13 +35,17 @@
       tags:
         - docker
 
-    - name: Include host git packages (Linux)
-      ansible.builtin.include_tasks: features/host_git_packages.yml
-      loop: '{{ h_git_packages | default([]) }}'
-      when:
-        - ansible_system == 'Linux'
-      tags:
-        - host
+    # Todo: Feature is broken
+    # HTTP Error 404: Not Found
+    # https://github.com/ClementTsang/bottom/releases/download/0.10.2/bottom_0.10.2_amd64.deb
+    #
+    # - name: Include host git packages (Linux)
+    #   ansible.builtin.include_tasks: features/host_git_packages.yml
+    #   loop: '{{ h_git_packages | default([]) }}'
+    #   when:
+    #     - ansible_system == 'Linux'
+    #   tags:
+    #     - host
 
     - name: Import nginx (Linux)
       ansible.builtin.import_tasks:

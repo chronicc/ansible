@@ -1,7 +1,5 @@
 # {{ ansible_managed }}
 ---
-version: '3.8'
-
 services:
   mattermost:
     image: mattermost/mattermost-team-edition:{{ a_mattermost_image_tag | default('latest') }}

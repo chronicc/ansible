@@ -1,7 +1,5 @@
 # {{ ansible_managed }}
 ---
-version: '3.8'
-
 services:
   valheim-server:
     image: "ghcr.io/lloesche/valheim-server:{{ a_valheim__image_tag | default('latest') }}"
