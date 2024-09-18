@@ -1,0 +1,20 @@
+---
+- name: nocobase // Create service directory
+  ansible.builtin.file:
+    dest: "{{ f_docker__home }}/nocobase"
+    state: directory
+    owner: root
+    group: docker
+    mode: "0755"
+
+- name: nocobase // Create docker-compose.yml
+  ansible.builtin.template:
+    src: templates/nocobase-docker-compose.yml.j2
+    dest: "{{ f_docker__home }}/nocobase/docker-compose.yml"
+    owner: root
+    group: docker
+    mode: "0644"
+
+- name: nocobase // Update deployment
+  community.docker.docker_compose:
+    project_src: "{{ f_docker__home }}/nocobase"
