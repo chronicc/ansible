@@ -134,6 +134,17 @@
         - application
         - mattermost-server
 
+    - name: Import nocobase
+      ansible.builtin.import_tasks:
+        file: applications/nocobase.yml
+      when:
+        - app_nocobase | default(false)
+        - feature_docker | default(false)
+        - feature_traefik | default(false)
+      tags:
+        - application
+        - nocobase
+
     - name: Import kuchen.cafe
       ansible.builtin.import_tasks:
         file: applications/kuchen.cafe.yml
