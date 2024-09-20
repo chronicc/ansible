@@ -8,9 +8,9 @@ services:
       - sys_nice
     stop_grace_period: 2m
     volumes:
-      - config:/config
-      - data:/opt/valheim
-      - worlds:/home/valheim/.config/unity3d/IronGate/Valheim/worlds_local
+      - ./config:/config
+      - ./data:/opt/valheim
+      - ./worlds:/home/valheim/.config/unity3d/IronGate/Valheim/worlds_local
     environment:
       ADMINLIST_IDS: "{{ a_valheim__adminlist_ids | default('') }}"
       BACKUPS_CRON: "{{ a_valheim__backups_cron | default('0 * * * *') }}"
@@ -20,6 +20,7 @@ services:
       SERVER_PASS: "{{ a_valheim__server_password | default('') }}"
       SERVER_PUBLIC: "{{ a_valheim__server_public | default('0') }}"
       TZ: "{{ a_valheim__timezone | default('Etc/UTC') }}"
+      VALHEIM_PLUS: "{{ a_valheim__valheim_plus | default('false') | bool }}"
       WORLD_NAME: "{{ a_valheim__world_name | default('Valheim') }}"
     networks:
       - default
@@ -27,8 +28,3 @@ services:
       - 2456-2458:2456-2458/udp
       - 9001:9001/udp
     restart: always
-
-volumes:
-  config:
-  data:
-  worlds:
