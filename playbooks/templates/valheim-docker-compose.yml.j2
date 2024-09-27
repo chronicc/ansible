@@ -15,11 +15,11 @@ services:
       ADMINLIST_IDS: "{{ a_valheim__adminlist_ids | default('') }}"
       BACKUPS_CRON: "{{ a_valheim__backups_cron | default('0 * * * *') }}"
       BANNEDLIST_IDS: "{{ a_valheim__bannedlist_ids | default('') }}"
-      BEPINEX: {{ a_valheim__bepinex | default('false') | lower }}
+      BEPINEX: "{{ a_valheim__bepinex | default('false') | lower }}"
       PERMITTEDLIST_IDS: "{{ a_valheim__permittedlist_ids | default('') }}"
       SERVER_NAME: "{{ a_valheim__server_name | default('Valheim Server') }}"
       SERVER_PASS: "{{ a_valheim__server_password | default('') }}"
-      SERVER_PUBLIC: {{ a_valheim__server_public | default('false') | lower }}
+      SERVER_PUBLIC: "{{ a_valheim__server_public | default('false') | lower }}"
       TZ: "{{ a_valheim__timezone | default('Etc/UTC') }}"
       WORLD_NAME: "{{ a_valheim__world_name | default('Valheim') }}"
     networks:
