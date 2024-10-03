@@ -4,7 +4,7 @@
   become: true
   serial: 10
   pre_tasks:
-    - name: Include OS-specific variables.
+    - name: Include OS-specific variables
       ansible.builtin.include_vars: '{{ item }}'
       with_first_found:
         - files:
@@ -17,14 +17,15 @@
 
   tasks:
     - name: Import docker (Linux)
-      ansible.builtin.import_tasks:
-        file: features/docker_linux.yml
+      ansible.builtin.import_role:
+        name: geerlingguy.docker
       when:
         - ansible_system == 'Linux'
+        - feature_docker | default(false)
       tags:
         - docker
 
-    - name: Import minecraft tasks.
+    - name: Import minecraft tasks
       ansible.builtin.import_tasks:
         file: applications/minecraft-server.yml
       when:

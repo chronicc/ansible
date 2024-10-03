@@ -24,11 +24,9 @@
 
     # ---( Features )---
 
-    # Don't use the geerlinguy.docker here since docker-compose
-    # needs to be installed with pip for the docker_compose module to work.
     - name: Import docker (Linux)
-      ansible.builtin.import_tasks:
-        file: features/docker_linux.yml
+      ansible.builtin.import_role:
+        name: geerlingguy.docker
       when:
         - ansible_system == 'Linux'
         - feature_docker | default(false)
@@ -226,7 +224,7 @@
         - docker
 
     - name: Restart loki
-      community.docker.docker_compose:
+      community.docker.docker_compose_v2:
         project_src: '{{ f_docker__home }}/loki'
         restarted: true
       tags:

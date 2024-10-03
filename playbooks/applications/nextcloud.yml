@@ -24,12 +24,12 @@
     backup: true
 
 - name: nextcloud // Update deployment
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ f_docker__home }}/nextcloud"
   when: not force_update | default(false)
 
 - name: nextcloud // Update deployment (forced)
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ f_docker__home }}/nextcloud"
     pull: true
   when: force_update | default(false)

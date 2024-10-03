@@ -46,5 +46,5 @@
     mode: "0644"
 
 - name: loki // Update deployment
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ f_docker__home }}/loki"
