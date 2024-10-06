@@ -205,13 +205,6 @@
         - application
         - nginx
 
-    - name: Restart docker
-      ansible.builtin.service:
-        name: docker
-        state: restarted
-      tags:
-        - docker
-
     - name: Restart loki
       community.docker.docker_compose_v2:
         project_src: '{{ f_docker__home }}/loki'
