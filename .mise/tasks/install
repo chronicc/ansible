@@ -2,6 +2,8 @@
 # mise description="Install project dependencies"
 # mise depends=["pip:install", "ansible:install"]
 
+cd $root
+
 if [ ! -f .vscode/settings.json ]
 then
     echo "No .vscode/settings.json found, copying from mise template."
