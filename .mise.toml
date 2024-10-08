@@ -3,4 +3,4 @@
 '_'.python.venv.path = ".venv"
 
 [tools]
-python = "3.12"
+python = "3.12.6"
