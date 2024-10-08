@@ -16,9 +16,8 @@
         - always
 
   roles:
-    - role: derJD.journald
-      tags:
-        - journal
+    - { role: chronicc.bouquet.bouquet_stack, tags: [bouquet] }
+    - { role: derJD.journald, tags: [journal] }
 
   tasks:
 
@@ -197,16 +196,6 @@
         - application
         - valheim
 
-    - name: Import valheim-server
-      ansible.builtin.import_tasks:
-        file: applications/valheim-server.yml
-      when:
-        - app_valheim | default(false)
-        - feature_docker | default(false)
-      tags:
-        - application
-        - valheim
-
   handlers:
     - name: Reload nginx
       ansible.builtin.service:
@@ -215,13 +204,6 @@
       tags:
         - application
         - nginx
-
-    - name: Restart docker
-      ansible.builtin.service:
-        name: docker
-        state: restarted
-      tags:
-        - docker
 
     - name: Restart loki
       community.docker.docker_compose_v2:

@@ -1,4 +1,8 @@
 collections:
+  - name: chronicc.bouquet
+    source: git+https://github.com/chronicc/ansible-collection-bouquet
+    type: git
+    version: 1.0.0
   - name: community.docker
     version: 3.12.2
   - name: community.general
