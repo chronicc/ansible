@@ -8,7 +8,7 @@
   ansible.builtin.get_url:
     dest: "/var/cache/ansible/android_studio_{{ f_android_studio__version }}.{{ android_studio_archive_format }}"
     mode: "0644"
-    url: "{{ android_studio_archive_url }}"
+    url: "{{ android_studio_url }}"
   when: not __android_studio_bin.stat.exists
 
 - name: android studio // Extract archive

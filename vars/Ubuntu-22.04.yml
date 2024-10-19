@@ -4,7 +4,7 @@ custom_binary_path: /usr/local/bin
 
 android_studio_archive_format: tar.gz
 android_studio_url_base: https://redirector.gvt1.com/edgedl/android/studio/ide-zips
-android_studio_url_app: "{{ f_android_studio__version }}/android-studio-ide-{{ f_android_studio__version }}.{{ android_studio_archive_format }}"
+android_studio_url_app: "{{ f_android_studio__version }}/android-studio-{{ f_android_studio__version }}-linux.{{ android_studio_archive_format }}"
 android_studio_url: "{{ android_studio_url_base }}/{{ android_studio_url_app }}"
 android_studio_install_path: "{{ custom_app_path }}/android-studio"
 
