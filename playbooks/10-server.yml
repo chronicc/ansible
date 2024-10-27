@@ -142,17 +142,6 @@
         - application
         - nocobase
 
-    - name: Import kuchen.cafe
-      ansible.builtin.import_tasks:
-        file: applications/kuchen.cafe.yml
-      when:
-        - app_kuchen_cafe | default(false)
-        - feature_docker | default(false)
-        - feature_traefik | default(false)
-      tags:
-        - application
-        - kuchen.cafe
-
     - name: Import nextcloud
       ansible.builtin.import_tasks:
         file: applications/nextcloud.yml
