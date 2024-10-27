@@ -19,6 +19,7 @@
         - main.yaml
       paths:
         - ../vars
+  no_log: true
 
 - name: Include target tasks
   ansible.builtin.include_tasks: '{{ _target }}.yml'
