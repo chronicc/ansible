@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# mise description="Get a list of all server features"
+
+cat playbooks/10-server.yml | grep -oP "feature_[^ ]+" | sort | uniq
