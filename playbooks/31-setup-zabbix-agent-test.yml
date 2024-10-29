@@ -1,0 +1,21 @@
+---
+- name: Setup a zabbix agent.
+  hosts: zabbix_agent
+  become: true
+  serial: 10
+  roles:
+    - role: community.zabbix.zabbix_agent
+      zabbix_agent_server: zabbix-1.vagrant
+      zabbix_agent_serveractive: zabbix-1.vagrant
+      zabbix_api_server_host: zabbix-1.vagrant
+      zabbix_api_login_user: Admin
+      zabbix_api_login_pass: zabbix
+      zabbix_api_create_hostgroup: false
+      zabbix_api_create_hosts: true
+      zabbix_host_groups:
+        - Linux servers
+      zabbix_agent_link_templates:
+        - Linux by Zabbix agent
+      zabbix_agent_tags:
+        - tag: environment
+          value: development
