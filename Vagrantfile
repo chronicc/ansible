@@ -4,7 +4,7 @@ require_relative './vagrant_ext/windows'
 Vagrant.configure('2') do |config|
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
-  config.hostmanager.manage_guest = false
+  config.hostmanager.manage_guest = true
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = false
   config.vagrant.plugins = [
@@ -19,6 +19,10 @@ Vagrant.configure('2') do |config|
     config.vm.define node['name'], autostart: false do |host|
       host.vm.box = node['box']
       host.vm.box_version = node['version'] if node['version']
+      host.hostmanager.aliases = "#{node['name']}.vagrant"
+      for alias_name in node['aliases'] || []
+        host.hostmanager.aliases << " #{alias_name}.#{node['name']}.vagrant"
+      end
       host.vm.hostname = node['name']
       host.vm.network 'private_network', ip: node['ip'] if node['ip']
 
