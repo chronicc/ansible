@@ -1,4 +1,4 @@
-# Zabbix Server Single Host Setup
+# Zabbix Standalone Server Setup
 #
 # Postgresql Debugging
 # --------------------
@@ -20,10 +20,15 @@
 # - Check syntax of configuration: apache2ctl -t
 #
 ---
-- name: Setup a zabbix server on a single host.
-  hosts: zabbix_server
+- name: Setup a zabbix server with database and web on a single host.
+  hosts: zabbix_standalone_server
   become: true
-  serial: 10
+  pre_tasks:
+    - name: Install python dependencies for RedHat based systems.
+      ansible.builtin.package:
+        name: policycoreutils-python-utils
+        state: present
+      when: ansible_os_family == 'RedHat'
   roles:
     - role: geerlingguy.apache
       apache_remove_default_vhost: true
@@ -36,6 +41,11 @@
               Deny from all
               Allow from 127.0.0.1
             </location>
+
+            ## Logging
+            ErrorLog "/var/log/apache2/status.zabbix-1.vagrant_error.log"
+            ServerSignature Off
+            CustomLog "/var/log/apache2/status.zabbix-1.vagrant_access.log" combined
     - role: geerlingguy.php
     - role: geerlingguy.postgresql
       postgresql_users:
@@ -55,6 +65,7 @@
       zabbix_server_dbport: 5432
       zabbix_server_dbuser: zabbix
     - role: community.zabbix.zabbix_agent
+      zabbix_agent_package_remove: true
       zabbix_agent_server: 127.0.0.1
       zabbix_agent_serveractive: 127.0.0.1
       zabbix_agent2: true

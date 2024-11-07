@@ -1,0 +1,110 @@
+# Zabbix Multi Server Setup
+#
+---
+- name: Setup a database server.
+  hosts: zabbix_database
+  become: true
+  roles:
+    - role: geerlingguy.postgresql
+      postgresql_global_config_options:
+        - option: listen_addresses
+          value: '*'
+        - option: log_directory
+          value: 'log'
+        - option: unix_socket_directories
+          value: '{{ postgresql_unix_socket_directories | join(",") }}'
+      postgresql_hba_entries:
+        - { type: local, database: all, user: postgres, auth_method: peer }
+        - { type: local, database: all, user: all, auth_method: peer }
+        - { type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: md5 }
+        - { type: host, database: all, user: all, address: '::1/128', auth_method: md5 }
+        - { type: host, database: zabbix, user: zabbix, address: samenet, auth_method: scram-sha-256 }
+        - { type: host, database: zabbix, user: zabbix, address: samenet, auth_method: scram-sha-256 }
+        - { type: host, database: all, user: zbx_monitor, address: samenet, auth_method: scram-sha-256 }
+        - { type: host, database: all, user: zbx_monitor, address: samenet, auth_method: scram-sha-256 }
+      postgresql_users:
+        - name: zabbix
+          password: zabbixdbpass
+        - name: zbx_monitor
+          password: zabbixmonpass
+
+- name: Setup a web server.
+  hosts: zabbix_web
+  become: true
+  roles:
+    - role: geerlingguy.apache
+      apache_remove_default_vhost: true
+      apache_vhosts:
+        - servername: 'status.{{ inventory_hostname }}.vagrant'
+          extra_parameters: |
+            <location /server-status>
+              SetHandler server-status
+              Require local
+              Require host zabbix-1
+              Require host zabbix-2
+            </location>
+
+            ## Logging
+            ErrorLog "/var/log/apache2/status.{{ inventory_hostname }}.vagrant_error.log"
+            ServerSignature Off
+            CustomLog "/var/log/apache2/status.{{ inventory_hostname }}.vagrant_access.log" combined
+    - role: geerlingguy.php
+    - role: community.zabbix.zabbix_web
+      zabbix_api_server_url: www.zabbix-1.vagrant
+      zabbix_server_database: pgsql
+      zabbix_server_dbname: zabbix
+      zabbix_server_dbpassword: zabbixdbpass
+      zabbix_server_dbport: 5432
+      zabbix_server_dbuser: zabbix
+  tasks:
+    - name: Grant zbx_monitor user same permissions as pg_monitor.
+      community.postgresql.postgresql_query:
+        db: postgres
+        query: GRANT pg_monitor TO zbx_monitor;
+      become: true
+      become_user: postgres
+
+- name: Setup a zabbix server.
+  hosts: zabbix_server
+  become: true
+  pre_tasks:
+    - name: Install python dependencies for RedHat based systems.
+      ansible.builtin.package:
+        name: policycoreutils-python-utils
+        state: present
+      when: ansible_os_family == 'RedHat'
+  roles:
+    - role: community.zabbix.zabbix_server
+      zabbix_server_dbhost: zabbix-1.vagrant
+      zabbix_server_dbname: zabbix
+      zabbix_server_dbpassword_hash_method: scram-sha-256
+      zabbix_server_dbpassword: zabbixdbpass
+      zabbix_server_dbuser: zabbix
+      zabbix_server_hanodename: '{{ inventory_hostname }}'
+      zabbix_server_nodeaddress: '{{ ansible_default_ipv4.address }}:10051'
+      zabbix_server_version: 7.0
+    - role: community.zabbix.zabbix_agent
+      zabbix_agent_package_remove: true
+      zabbix_agent_server: '{{ zabbix_agent_server_overwrite | default("zabbix-1.vagrant,zabbix-2.vagrant") }}'
+      zabbix_agent_serveractive: '{{ zabbix_agent_serveractive_overwrite | default("zabbix-1.vagrant;zabbix-2.vagrant") }}'
+      zabbix_agent2: true
+      zabbix_api_create_hostgroup: false
+      zabbix_api_create_hosts: false
+      zabbix_api_login_pass: zabbix
+      zabbix_api_login_user: Admin
+      zabbix_api_server_host: www.zabbix-1.vagrant
+      zabbix_agent_tags:
+        - tag: environment
+          value: development
+      zabbix_host_groups:
+        - Linux servers
+        - Zabbix servers
+  tasks:
+    - name: Set timezone.
+      community.general.timezone:
+        name: Europe/Berlin
+    - name: Install zabbix agent2 plugins (Debian).
+      ansible.builtin.apt:
+        pkg:
+          - zabbix-agent2-plugin-postgresql
+      when: ansible_os_family == 'Debian'
