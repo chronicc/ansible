@@ -17,7 +17,7 @@ class Linux
           source: full_key_path,
           run: 'once'
 
-        config.vm.provision 'import_public_eys_to_root',
+        config.vm.provision 'import_public_keys_to_root',
           type: 'shell',
           inline: %Q(
             echo 'Creating /root/.ssh/authorized_keys with #{key_path}' \
