@@ -1,4 +1,6 @@
 ---
+
+# OS specific nodes
 - name: almalinux-8
   box: almalinux/8
 - name: almalinux-9
@@ -21,3 +23,14 @@
 - name: windows-server-2022
   box: peru/windows-server-2022-standard-x64-eval
   guest: windows
+
+# Task specific nodes
+- name: zabbix-1
+  box: generic/ubuntu2204
+  aliases:
+    - www
+    - status
+- name: zabbix-2
+  box: generic/ubuntu2204
+- name: zabbix-proxy-1
+  box: generic/ubuntu2204
