@@ -35,6 +35,8 @@ roles:
     version: v1.0.1
   - name: geerlingguy.apache
     version: 4.0.0
+  - name: geerlingguy.composer
+    version: 1.9.2
   - name: geerlingguy.docker
     version: 7.4.1
   - name: geerlingguy.mysql
