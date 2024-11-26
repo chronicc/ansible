@@ -1,0 +1,15 @@
+# Composer Tool Setup
+#
+# For configuration see group_vars/all/composer.yml.
+#
+---
+- name: Setup composer and dependencies.
+  hosts: composer
+  become: true
+  pre_tasks:
+    - name: Set timezone.
+      community.general.timezone:
+        name: Europe/Berlin
+  roles:
+    - role: geerlingguy.php
+    - role: geerlingguy.composer
