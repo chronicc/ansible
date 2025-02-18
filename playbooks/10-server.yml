@@ -17,7 +17,6 @@
         - always
 
   roles:
-    - { role: chronicc.bouquet.bouquet_stack, tags: [bouquet] }
     - { role: derJD.journald, tags: [journal] }
 
   tasks:
@@ -31,6 +30,17 @@
         - ansible_system == 'Linux'
         - feature_docker | default(false)
       tags:
+        - docker
+
+    - name: Import bouquet stack (Linux)
+      ansible.builtin.import_role:
+        name: chronicc.bouquet.bouquet_stack
+      when:
+        - ansible_system == 'Linux'
+        - feature_docker | default(false)
+      tags:
+        - application
+        - bouquet
         - docker
 
     # Todo: Feature is broken
