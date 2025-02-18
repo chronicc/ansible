@@ -1,0 +1,37 @@
+---
+custom_app_path: /opt
+custom_binary_path: /usr/local/bin
+
+android_studio_archive_format: tar.gz
+android_studio_url_base: https://redirector.gvt1.com/edgedl/android/studio/ide-zips
+android_studio_url_app: "{{ f_android_studio__version }}/android-studio-{{ f_android_studio__version }}-linux.{{ android_studio_archive_format }}"
+android_studio_url: "{{ android_studio_url_base }}/{{ android_studio_url_app }}"
+android_studio_install_path: "{{ custom_app_path }}/android-studio"
+
+flutter_archive_format: tar.xz
+flutter_archive_url_base: https://storage.googleapis.com/flutter_infra_release/releases/stable/linux
+flutter_archive_url: "{{ flutter_archive_url_base }}/flutter_linux_{{ f_flutter__version }}-stable.{{ flutter_archive_format }}"
+flutter_dependencies:
+  - bash
+  - clang
+  - cmake
+  - curl
+  - git
+  - libglu1-mesa
+  - libgtk-3-dev
+  - liblzma-dev
+  - libstdc++-12-dev
+  - ninja-build
+  - pkg-config
+  - unzip
+  - xz-utils
+  - zip
+flutter_install_path: "{{ custom_app_path }}/flutter"
+
+nginx_certificates_path: /etc/nginx/certs
+nginx_package: nginx
+nginx_sites_path: /etc/nginx/sites-enabled
+nginx_uninstall_paths:
+  - /etc/nginx
+  - /var/www/html
+nginx_www_path: /var/www/html
