@@ -1,34 +1,15 @@
 ---
-- name: Ensure ansible cache directory is present
-  ansible.builtin.file:
-    path: '{{ init_ansible_cache_path }}'
-    state: directory
-    mode: '0755'
+- name: Install required python packages
+  ansible.builtin.apt:
+    name: '{{ item }}'
+    state: present
+    update_cache: true
+    cache_valid_time: ' {{ apt_cache_valid_time | default("3600") }}'
+  loop: '{{ init_python_packages }}'
 
-- name: Check if init has already been run
-  ansible.builtin.stat:
-    path: '{{ init_ansible_cache_path }}/init.complete'
-  register: __init_complete
-
-- name: Run init if it has not already been run
-  when: not __init_complete.stat.exists
-  block:
-    - name: Install required python packages
-      ansible.builtin.apt:
-        name: '{{ item }}'
-        state: present
-        update_cache: true
-        cache_valid_time: ' {{ apt_cache_valid_time | default("3600") }}'
-      loop: '{{ init_python_packages }}'
-
-    - name: Install required pip packages
-      ansible.builtin.pip:
-        name: '{{ item }}'
-        state: present
-      loop: '{{ init_pip_packages }}'
-
-    - name: Mark init as complete
-      ansible.builtin.file:
-        path: '{{ init_ansible_cache_path }}/init.complete'
-        state: touch
-        mode: '0644'
+- name: Install required pip packages
+  ansible.builtin.pip:
+    name: '{{ item }}'
+    state: present
+    break_system_packages: true
+  loop: '{{ init_pip_packages }}'
