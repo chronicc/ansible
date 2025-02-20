@@ -87,6 +87,17 @@
 
     # ---( Applications )---
 
+    - name: Import backstage
+      ansible.builtin.import_tasks:
+        file: applications/backstage.yml
+      when:
+        - app_backstage | default(false)
+        - feature_docker | default(false)
+        - feature_traefik | default(false)
+      tags:
+        - application
+        - backstage
+
     - name: Import baserow
       ansible.builtin.import_tasks:
         file: applications/baserow.yml

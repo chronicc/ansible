@@ -1,0 +1,27 @@
+---
+- name: backstage // Create service directory
+  ansible.builtin.file:
+    dest: "{{ f_docker__home }}/backstage"
+    state: directory
+    owner: root
+    group: docker
+    mode: "0755"
+
+- name: backstage // Create docker-compose.yml
+  ansible.builtin.template:
+    src: templates/docker-compose/backstage.yml.j2
+    dest: "{{ f_docker__home }}/backstage/docker-compose.yml"
+    owner: root
+    group: docker
+    mode: "0644"
+
+- name: backstage // Update deployment
+  community.docker.docker_compose_v2:
+    project_src: "{{ f_docker__home }}/backstage"
+  when: not force_update | default(false)
+
+- name: backstage // Update deployment (forced)
+  community.docker.docker_compose_v2:
+    project_src: "{{ f_docker__home }}/backstage"
+    pull: true
+  when: force_update | default(false)
