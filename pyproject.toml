@@ -1,0 +1,26 @@
+[project]
+name = "cc.chroni.ansible"
+version = "0.1.0"
+description = "Ansible IaC for chroni.cc, kurthos.com and kurthos.studio."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ansible",
+    "ansible-core",
+    "docker",
+    "netaddr",
+    "pywinrm",
+]
+
+[dependency-groups]
+dev = [
+    "ansible-lint",
+    "glitch",
+    "molecule",
+    "molecule-docker",
+    "numpy<=1.26.4",
+    "pre-commit",
+]
+
+[tool.uv.sources]
+glitch = { git = "https://github.com/sr-lab/GLITCH.git" }

@@ -1,5 +1,0 @@
-ansible
-ansible-core
-docker
-netaddr
-pywinrm
