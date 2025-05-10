@@ -17,6 +17,8 @@
   box: generic/ubuntu2004
 - name: ubuntu-2204
   box: generic/ubuntu2204
+- name: ubuntu-2404
+  box: bento/ubuntu-24.04
 - name: windows-server-2019
   box: peru/windows-server-2019-standard-x64-eval
   guest: windows
