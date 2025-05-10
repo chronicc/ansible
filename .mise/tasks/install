@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154
 # mise description="Install project dependencies"
-# mise depends=["pip:install", "ansible:install"]
+# mise depends=["ansible:install"]
 
-cd $root
+cd "$root" || exit 1
 
 if [ ! -f .vscode/settings.json ]
 then

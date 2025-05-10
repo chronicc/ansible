@@ -1,6 +1,6 @@
+.ansible
 .cache
 .docker
-.rtx.local.toml
 .vagrant
 .venv
 .vscode

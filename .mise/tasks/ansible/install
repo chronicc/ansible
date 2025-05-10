@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # mise description="Install ansible requirements"
-# mise depends=["pip:install"]
+# mise depends=["python:install"]
 
 if [ -f requirements.yml ]
 then
