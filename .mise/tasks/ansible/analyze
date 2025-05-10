@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# mise description="Analyze ansible code"
+# mise depends=["python:install"]
+
+mkdir -p output
+ansible-lint --project-dir playbooks/ 2>&1 | tee output/lint.txt
+glitch --tech ansible playbooks/ | tee output/glitch.txt
